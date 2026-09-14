@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Dis Oui — l'invitation à un date qu'on ne peut pas refuser</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Georgia', 'Times New Roman', serif;
+        background: #EDE3D3;
+        color: #3A1F1F;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+    }
+
+    .top-banner {
+        background: #7A1F2B;
+        color: #F5EFE3;
+        text-align: center;
+        padding: 14px;
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        min-height: 70vh;
+        position: relative;
+    }
+
+    /* ============ ETAPE 1 : ENVELOPPE ============ */
+    #stageEnvelope { display: flex; }
+    #stageEnvelope.hidden { display: none; }
+
+    .envelope {
+        width: 320px;
+        height: 220px;
+        background: #F5EFE3;
+        border: 1px solid #D8C9AC;
+        border-radius: 4px;
+        position: relative;
+        cursor: pointer;
+        box-shadow: 0 20px 50px rgba(58,31,31,0.12);
+        transition: transform 0.2s ease;
+    }
+    .envelope:hover { transform: translateY(-4px); }
+    .envelope::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 0;
+        border-left: 160px solid transparent;
+        border-right: 160px solid transparent;
+        border-top: 110px solid #E8DCC5;
+    }
+    .seal {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px; height: 50px;
+        background: #7A1F2B;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        color: #F5EFE3;
+        font-size: 20px;
+        z-index: 2;
+        box-shadow: 0 4px 10px rgba(58,31,31,0.3);
+    }
+    .envelope-hint {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #B08D57;
+    }
+    .envelope-arrow { font-size: 18px; display: block; margin-bottom: 6px; animation: bounce 1.5s infinite; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    /* ============ ETAPE 2 : INVITATION OUI/NON ============ */
+    #stageInvite { display: none; }
+    #stageInvite.active { display: flex; }
+
+    .invite-card {
+        background: #F5EFE3;
+        border: 1px solid #D8C9AC;
+        border-radius: 6px;
+        padding: 50px 60px;
+        text-align: center;
+        max-width: 480px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(58,31,31,0.15);
+        position: relative;
+    }
+    .invite-to {
+        font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+        color: #8A7050; margin-bottom: 14px;
+    }
+    .invite-question {
+        font-size: 30px; font-style: italic; color: #7A1F2B;
+        line-height: 1.35; margin-bottom: 10px;
+    }
+    .invite-subtext { font-size: 13px; color: #9A8768; font-style: italic; margin-bottom: 36px; }
+    .invite-buttons { display: flex; gap: 20px; justify-content: center; position: relative; height: 60px; }
+    .btn { padding: 14px 34px; border-radius: 4px; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.15s ease; letter-spacing: 0.5px; border: none; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-yes { background: #7A1F2B; color: #F5EFE3; }
+    .btn-no { background: transparent; color: #9A8768; border: 1px solid #D8C9AC; position: absolute; transition: transform 0.25s ease-out; }
+
+    /* ============ ETAPE 3 : PLAN + CONFIRMATION ============ */
+    #stagePlan { display: none; }
+    #stagePlan.active { display: flex; }
+
+    .plan-card {
+        background: #F5EFE3;
+        border: 1px solid #D8C9AC;
+        border-radius: 6px;
+        padding: 44px 50px;
+        text-align: center;
+        max-width: 520px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(58,31,31,0.15);
+    }
+    .plan-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #B08D57; margin-bottom: 14px; }
+    .plan-title { font-size: 30px; font-style: italic; color: #7A1F2B; margin-bottom: 18px; }
+    .plan-mission { font-size: 16px; color: #3A1F1F; margin-bottom: 4px; }
+    .plan-meta { font-size: 13px; color: #9A8768; margin-bottom: 20px; }
+    .plan-brief { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #B08D57; line-height: 1.7; margin-bottom: 26px; }
+
+    .time-slots { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+    .time-slot {
+        padding: 10px 18px; border: 1px solid #D8C9AC; border-radius: 4px;
+        font-size: 14px; color: #3A1F1F; cursor: pointer; background: transparent;
+        transition: all 0.15s ease;
+    }
+    .time-slot:hover { border-color: #7A1F2B; }
+    .time-slot.selected { background: #7A1F2B; color: #F5EFE3; border-color: #7A1F2B; }
+
+    .plan-note-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #B08D57; margin-bottom: 10px; }
+    .plan-note-input {
+        width: 100%; border: none; border-bottom: 1px solid #D8C9AC;
+        background: transparent; text-align: center; font-family: 'Georgia', serif;
+        font-style: italic; font-size: 15px; color: #3A1F1F; padding: 8px 0 12px;
+        margin-bottom: 26px; outline: none;
+    }
+    .plan-note-input::placeholder { color: #C4B090; }
+
+    .btn-confirm {
+        width: 100%; padding: 16px; background: #B08D9A; color: #F5EFE3;
+        border: none; border-radius: 4px; font-size: 14px; letter-spacing: 1px;
+        text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-confirm.ready { background: #7A1F2B; }
+    .btn-confirm:hover.ready { background: #5E1620; }
+
+    /* ============ ETAPE 4 : SUCCES ============ */
+    #stageSuccess { display: none; }
+    #stageSuccess.active { display: flex; }
+    .success-title { font-size: 26px; font-style: italic; color: #7A1F2B; margin-bottom: 10px; }
+    .success-text { font-size: 14px; color: #8A7050; text-align: center; max-width: 400px; }
+
+    .bottom-bar {
+        display: flex; gap: 16px; justify-content: center;
+        padding: 24px; background: #F5EFE3; border-top: 1px solid #E8DCC5;
+    }
+    .bottom-bar.hidden { display: none; }
+    .btn-outline {
+        padding: 14px 34px; background: transparent; border: 1px solid #D8C9AC;
+        color: #8A7050; border-radius: 4px; font-size: 13px; letter-spacing: 1px;
+        text-transform: uppercase; cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+    <div class="top-banner">Ton invitation — essaie de dire non.</div>
+
+    <!-- ETAPE 1 : ENVELOPPE -->
+    <div class="stage" id="stageEnvelope">
+        <div class="envelope" id="envelope" onclick="openEnvelope()">
+            <div class="seal">♥</div>
+        </div>
+        <div class="envelope-hint">
+            <span class="envelope-arrow">↑</span>
+            Touche la lettre
+        </div>
+    </div>
+
+    <!-- ETAPE 2 : QUESTION OUI/NON -->
+    <div class="stage" id="stageInvite">
+        <div class="invite-card">
+            <div class="invite-to">Pour toi, <span id="recipientName">Aliman</span></div>
+            <div class="invite-question">Ça te dit un date<br>avec moi ?</div>
+            <div class="invite-subtext">(dire non ne sert à rien, mais tu peux essayer)</div>
+            <div class="invite-buttons" id="buttonZone">
+                <button class="btn btn-yes" onclick="goToPlan()">Oui</button>
+                <button class="btn btn-no" id="btnNo">Non</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ETAPE 3 : PLAN + CRENEAUX + MOT -->
+    <div class="stage" id="stagePlan">
+        <div class="plan-card">
+            <div class="plan-label">Parfait</div>
+            <div class="plan-title">Voilà le plan</div>
+            <div class="plan-mission">Mission Montmartre (Niveau : Confidentiel)</div>
+            <div class="plan-meta">Point de ralliement : Sortie du métro Abbesses</div>
+            <div class="plan-brief">
+                Samedi 19 septembre — Prérequis : un bon sens de<br>
+                l'orientation, beaucoup de second degré et un<br>
+                stylo. Le perdant paie les cafés.
+            </div>
+
+            <div class="time-slots" id="timeSlots">
+                <button class="time-slot" data-time="11:00">11:00</button>
+                <button class="time-slot" data-time="13:00">13:00</button>
+                <button class="time-slot" data-time="17:00">17:00</button>
+                <button class="time-slot" data-time="19:00">19:00</button>
+                <button class="time-slot" data-time="21:00">21:00</button>
+            </div>
+
+            <div class="plan-note-label">Un mot pour moi (facultatif)</div>
+            <input type="text" class="plan-note-input" id="noteInput" placeholder="...">
+
+            <button class="btn-confirm" id="btnConfirm" onclick="confirmPlan()">Confirmer</button>
+        </div>
+    </div>
+
+    <!-- ETAPE 4 : SUCCES -->
+    <div class="stage" id="stageSuccess">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+            <div class="success-title">Rendez-vous pris ✨</div>
+            <div class="success-text" id="successMessage">Il/elle va recevoir ta réponse et ton créneau tout de suite.</div>
+        </div>
+    </div>
+
+<script>
+let selectedTime = null;
+let dodgeCount = 0;
+let inviteData = {
+    invite_id: new URLSearchParams(window.location.search).get('id') || 'inconnu',
+    recipient: 'Aliman',
+    choice: null,
+    dodge_attempts: 0,
+    selected_time: null,
+    note: '',
+    timestamp: null,
+};
+
+// ============================================================
+// ETAPE 1 -> 2 : ouverture de l'enveloppe
+// ============================================================
+function openEnvelope() {
+    document.getElementById('stageEnvelope').classList.add('hidden');
+    document.getElementById('stageInvite').classList.add('active');
+}
+
+// ============================================================
+// BOUTON "NON" QUI FUIT LA SOURIS (etape 2)
+// ============================================================
+const btnNo = document.getElementById('btnNo');
+const buttonZone = document.getElementById('buttonZone');
+
+function moveButtonAway() {
+    const zoneRect = buttonZone.getBoundingClientRect();
+    const btnRect = btnNo.getBoundingClientRect();
+    const maxX = zoneRect.width - btnRect.width;
+    const randomX = Math.random() * maxX - (maxX / 2);
+    const randomY = (Math.random() - 0.5) * 40;
+
+    btnNo.style.left = `calc(50% + ${randomX}px)`;
+    btnNo.style.top = `${randomY}px`;
+    btnNo.style.transform = 'translateX(-50%)';
+}
+
+btnNo.addEventListener('mouseenter', () => {
+    dodgeCount += 1;
+    moveButtonAway();
+    if (dodgeCount === 3) btnNo.textContent = "Non (sérieusement ?)";
+    else if (dodgeCount === 6) btnNo.textContent = "Non !!";
+    else if (dodgeCount >= 10) btnNo.textContent = "Bon, ok...";
+});
+btnNo.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    dodgeCount += 1;
+    moveButtonAway();
+});
+
+// ============================================================
+// ETAPE 2 -> 3 : clic sur "Oui"
+// ============================================================
+function goToPlan() {
+    inviteData.choice = 'oui';
+    inviteData.dodge_attempts = dodgeCount;
+
+    document.getElementById('stageInvite').classList.remove('active');
+    document.getElementById('stagePlan').classList.add('active');
+}
+
+// ============================================================
+// ETAPE 3 : selection du creneau horaire
+// ============================================================
+document.querySelectorAll('.time-slot').forEach(slot => {
+    slot.addEventListener('click', () => {
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        slot.classList.add('selected');
+        selectedTime = slot.dataset.time;
+        document.getElementById('btnConfirm').classList.add('ready');
+    });
+});
+
+// ============================================================
+// ETAPE 3 -> 4 : confirmation finale (RECUPERATION DE LA REPONSE)
+// ============================================================
+function confirmPlan() {
+    if (!selectedTime) {
+        alert('Choisis un créneau avant de confirmer 😊');
+        return;
+    }
+
+    inviteData.selected_time = selectedTime;
+    inviteData.note = document.getElementById('noteInput').value;
+    inviteData.timestamp = new Date().toISOString();
+
+    // --- Sauvegarde locale (fonctionne toujours, sans backend) ---
+    localStorage.setItem('dis_oui_response_' + inviteData.invite_id, JSON.stringify(inviteData));
+
+    // --- Envoi vers un backend gratuit (voir options dans sendResponseToBackend) ---
+    sendResponseToBackend(inviteData);
+
+    console.log('Réponse finale capturée :', inviteData);
+
+    document.getElementById('stagePlan').classList.remove('active');
+    document.getElementById('stageSuccess').classList.add('active');
+    document.getElementById('successMessage').textContent =
+        `Créneau choisi : ${selectedTime}. Il/elle va recevoir ta réponse tout de suite.`;
+}
+
+function sendResponseToBackend(data) {
+    // OPTION A - Airtable webhook (gratuit)
+
+    fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/appQyL0UDyZxS5gkT/wfldsewJA3urWTFoU/wtrOdZ10XjxAzNKBP', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
+    
+
+    // OPTION B - Formspree (gratuit jusqu'a ~50 soumissions/mois)
+    /*
+    fetch('https://formspree.io/f/TON_ID_ICI', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify(data)
+    });
+    */
+}
+
+// ============================================================
+// Personnalisation du prenom via l'URL (?nom=Camille)
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nom = urlParams.get('nom');
+    if (nom) {
+        document.getElementById('recipientName').textContent = nom;
+        inviteData.recipient = nom;
+    }
+});
+</script>
+
+</body>
+</html>
