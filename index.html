@@ -348,6 +348,7 @@ function confirmPlan() {
 
 function sendResponseToBackend(data) {
     // OPTION A - Airtable webhook (gratuit)
+    /*
 
     fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/appQyL0UDyZxS5gkT/wfldsewJA3urWTFoU/wtrOdZ10XjxAzNKBP', {
     method: 'POST',
@@ -355,14 +356,16 @@ function sendResponseToBackend(data) {
     body: JSON.stringify({test: 'bonjour'})
 }).then(r => r.json()).then(d => console.log('SUCCESS:', d)).catch(e => console.log('ERREUR:', e));
 
+    */
+
     // OPTION B - Formspree (gratuit jusqu'a ~50 soumissions/mois)
-    /*
-    fetch('https://formspree.io/f/TON_ID_ICI', {
+
+    fetch('https://formspree.io/f/xpwyakdv', {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
         body: JSON.stringify(data)
     });
-    */
+    
 }
 
 // ============================================================
