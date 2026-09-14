@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Créer mon invitation — Dis Oui</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: 'Georgia', 'Times New Roman', serif;
+        background: #EDE3D3;
+        color: #3A1F1F;
+        min-height: 100vh;
+        padding: 40px 20px 120px;
+    }
+    .top-banner {
+        background: #7A1F2B;
+        color: #F5EFE3;
+        text-align: center;
+        padding: 14px;
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 10;
+    }
+    .container {
+        max-width: 640px;
+        margin: 70px auto 0;
+        background: #F5EFE3;
+        border: 1px solid #D8C9AC;
+        border-radius: 6px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(58,31,31,0.12);
+    }
+    h1 {
+        font-size: 26px;
+        font-style: italic;
+        color: #7A1F2B;
+        margin-bottom: 6px;
+        text-align: center;
+    }
+    .subtitle {
+        text-align: center;
+        font-size: 13px;
+        color: #9A8768;
+        margin-bottom: 30px;
+    }
+    .field-label {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #B08D57;
+        margin-bottom: 8px;
+        margin-top: 24px;
+        display: block;
+    }
+    .field-label:first-of-type { margin-top: 0; }
+    input[type="text"] {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid #D8C9AC;
+        border-radius: 4px;
+        background: #FFFDF8;
+        font-family: 'Georgia', serif;
+        font-size: 15px;
+        color: #3A1F1F;
+        outline: none;
+    }
+    input[type="text"]:focus { border-color: #7A1F2B; }
+    textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #D8C9AC;
+        border-radius: 4px;
+        background: #FFFDF8;
+        font-family: 'Georgia', serif;
+        font-style: italic;
+        font-size: 13px;
+        color: #3A1F1F;
+        outline: none;
+        resize: vertical;
+        min-height: 44px;
+    }
+    textarea:focus { border-color: #7A1F2B; }
+
+    .required-tag {
+        display: inline-block;
+        background: #7A1F2B;
+        color: #F5EFE3;
+        font-size: 9px;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-left: 8px;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+    }
+    .optional-tag {
+        display: inline-block;
+        background: transparent;
+        color: #B08D57;
+        border: 1px solid #D8C9AC;
+        font-size: 9px;
+        padding: 2px 8px;
+        border-radius: 10px;
+        margin-left: 8px;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+    }
+
+    .options-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .option-chip {
+        padding: 10px 16px;
+        border: 1px solid #D8C9AC;
+        border-radius: 20px;
+        background: #FFFDF8;
+        font-size: 13px;
+        color: #3A1F1F;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        user-select: none;
+    }
+    .option-chip:hover { border-color: #7A1F2B; }
+    .option-chip.selected-main {
+        background: #7A1F2B;
+        color: #F5EFE3;
+        border-color: #7A1F2B;
+        font-weight: bold;
+    }
+    .option-chip.selected-alt {
+        background: #E8D5D9;
+        color: #7A1F2B;
+        border-color: #B08D9A;
+    }
+    .option-chip .chip-star { margin-right: 4px; }
+
+    .add-option-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 14px;
+    }
+    .add-option-row input {
+        flex: 1;
+        padding: 10px 12px;
+        border: 1px dashed #D8C9AC;
+        border-radius: 4px;
+        background: transparent;
+        font-family: 'Georgia', serif;
+        font-size: 13px;
+        outline: none;
+    }
+    .btn-add {
+        padding: 10px 18px;
+        background: transparent;
+        border: 1px solid #B08D57;
+        color: #B08D57;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .btn-add:hover { background: #B08D57; color: #F5EFE3; }
+
+    .legend {
+        font-size: 11px;
+        color: #9A8768;
+        margin-top: 10px;
+        font-style: italic;
+    }
+
+    /* ============ ZONE DESCRIPTIONS ============ */
+    .descriptions-panel {
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px dashed #D8C9AC;
+    }
+    .description-item {
+        margin-bottom: 16px;
+        padding: 14px;
+        background: #FFFDF8;
+        border: 1px solid #E8DCC5;
+        border-radius: 6px;
+    }
+    .description-item-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+    .description-item-name {
+        font-size: 14px;
+        font-weight: bold;
+        color: #3A1F1F;
+    }
+    .description-badge-main {
+        font-size: 9px;
+        background: #7A1F2B;
+        color: #F5EFE3;
+        padding: 2px 8px;
+        border-radius: 10px;
+        letter-spacing: 0.5px;
+    }
+    .description-badge-alt {
+        font-size: 9px;
+        border: 1px solid #B08D9A;
+        color: #7A1F2B;
+        padding: 2px 8px;
+        border-radius: 10px;
+        letter-spacing: 0.5px;
+    }
+    .no-selection-hint {
+        font-size: 12px;
+        color: #B0A088;
+        font-style: italic;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .btn-generate {
+        width: 100%;
+        padding: 16px;
+        background: #7A1F2B;
+        color: #F5EFE3;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-top: 34px;
+        transition: background 0.2s;
+    }
+    .btn-generate:hover { background: #5E1620; }
+    .btn-generate:disabled { background: #C9B8B0; cursor: not-allowed; }
+
+    .result-box {
+        display: none;
+        margin-top: 26px;
+        padding: 20px;
+        background: #FFFDF8;
+        border: 1px solid #D8C9AC;
+        border-radius: 6px;
+    }
+    .result-box.active { display: block; }
+    .result-label {
+        font-size: 11px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #B08D57;
+        margin-bottom: 10px;
+    }
+    .result-url {
+        font-family: monospace;
+        font-size: 13px;
+        color: #3A1F1F;
+        word-break: break-all;
+        padding: 12px;
+        background: #EDE3D3;
+        border-radius: 4px;
+        margin-bottom: 14px;
+    }
+    .result-actions {
+        display: flex;
+        gap: 10px;
+    }
+    .btn-copy, .btn-send {
+        flex: 1;
+        padding: 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: block;
+    }
+    .btn-copy { background: transparent; border: 1px solid #D8C9AC; color: #8A7050; }
+    .btn-send { background: #25D366; color: white; }
+</style>
+</head>
+<body>
+
+    <div class="top-banner">Créer ton invitation — Dis Oui</div>
+
+    <div class="container">
+        <h1>Configure ton invitation</h1>
+        <div class="subtitle">Choisis une option principale, ajoute des alternatives, puis génère le lien.</div>
+
+        <label class="field-label">Prénom du/de la destinataire</label>
+        <input type="text" id="recipientInput" placeholder="Ex : Camille">
+
+        <label class="field-label">
+            Options de sortie
+            <span class="required-tag">1 obligatoire</span>
+            <span class="optional-tag">+ facultatives</span>
+        </label>
+        <div class="options-grid" id="optionsGrid"></div>
+
+        <div class="add-option-row">
+            <input type="text" id="newOptionInput" placeholder="Ajouter une option personnalisée...">
+            <button class="btn-add" onclick="addCustomOption()">+ Ajouter</button>
+        </div>
+        <div class="legend">Clique une fois = option principale (★ obligatoire). Reclique = option alternative. Re-reclique = désélectionner.</div>
+
+        <div class="descriptions-panel" id="descriptionsPanel">
+            <label class="field-label" style="margin-top:0;">Décris chaque option choisie (facultatif)</label>
+            <div id="descriptionsList"></div>
+        </div>
+
+        <button class="btn-generate" id="btnGenerate" onclick="generateLink()">Générer le lien</button>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-label">Ton lien est prêt</div>
+            <div class="result-url" id="resultUrl"></div>
+            <div class="result-actions">
+                <button class="btn-copy" onclick="copyLink()">Copier le lien</button>
+                <a class="btn-send" id="sendWhatsapp" href="#" target="_blank">Envoyer par WhatsApp</a>
+            </div>
+        </div>
+    </div>
+
+<script>
+const BASE_URL = 'https://soradata.github.io/dis-oui-a-mon-invitation/';
+
+const defaultOptions = [
+    "Montmartre", "Ciné", "Mini-golf", "Picnic", "Restaurant",
+    "Balade au parc", "Bowling", "Escape game", "Musée", "Karting",
+    "Plage", "Randonnée", "Aquarium", "Patinoire", "Concert",
+    "Brunch", "Vélo", "Kayak", "Accrobranche", "Marché nocturne"
+];
+
+let allOptions = [...defaultOptions];
+let mainOption = null;
+let altOptions = new Set();
+let descriptions = {};
+
+function renderOptions() {
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    allOptions.forEach(opt => {
+        const chip = document.createElement('div');
+        chip.className = 'option-chip';
+        if (mainOption === opt) chip.classList.add('selected-main');
+        else if (altOptions.has(opt)) chip.classList.add('selected-alt');
+
+        chip.innerHTML = (mainOption === opt ? '<span class="chip-star">★</span>' : '') + opt;
+        chip.onclick = () => cycleOption(opt);
+        grid.appendChild(chip);
+    });
+    renderDescriptions();
+}
+
+function cycleOption(opt) {
+    if (mainOption === opt) {
+        mainOption = null;
+        altOptions.add(opt);
+    } else if (altOptions.has(opt)) {
+        altOptions.delete(opt);
+        delete descriptions[opt];
+    } else {
+        if (mainOption === null) {
+            mainOption = opt;
+        } else {
+            altOptions.add(opt);
+        }
+    }
+    renderOptions();
+}
+
+function renderDescriptions() {
+    const list = document.getElementById('descriptionsList');
+    list.innerHTML = '';
+
+    const selected = [];
+    if (mainOption) selected.push({ name: mainOption, isMain: true });
+    altOptions.forEach(opt => selected.push({ name: opt, isMain: false }));
+
+    if (selected.length === 0) {
+        list.innerHTML = '<div class="no-selection-hint">Sélectionne au moins une option ci-dessus pour ajouter une description.</div>';
+        return;
+    }
+
+    selected.forEach(({ name, isMain }) => {
+        const item = document.createElement('div');
+        item.className = 'description-item';
+
+        const header = document.createElement('div');
+        header.className = 'description-item-header';
+        header.innerHTML = `
+            <span class="description-item-name">${name}</span>
+            <span class="${isMain ? 'description-badge-main' : 'description-badge-alt'}">${isMain ? '★ Principale' : 'Alternative'}</span>
+        `;
+
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = `Ex : ${name === 'Montmartre' ? 'RDV sortie métro Abbesses, tenue confortable, on marche pas mal !' : 'Décris le lieu, l\'heure approximative, l\'ambiance...'}`;
+        textarea.value = descriptions[name] || '';
+        textarea.addEventListener('input', (e) => {
+            descriptions[name] = e.target.value;
+        });
+
+        item.appendChild(header);
+        item.appendChild(textarea);
+        list.appendChild(item);
+    });
+}
+
+function addCustomOption() {
+    const input = document.getElementById('newOptionInput');
+    const value = input.value.trim();
+    if (value && !allOptions.includes(value)) {
+        allOptions.push(value);
+        input.value = '';
+        renderOptions();
+    }
+}
+
+document.getElementById('newOptionInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') addCustomOption();
+});
+
+function generateLink() {
+    const recipient = document.getElementById('recipientInput').value.trim();
+
+    if (!recipient) {
+        alert('Ajoute le prénom du/de la destinataire 😊');
+        return;
+    }
+    if (!mainOption) {
+        alert('Choisis une option obligatoire (clique une fois sur une option pour la rendre principale ★)');
+        return;
+    }
+
+    const inviteId = 'inv' + Date.now().toString(36);
+    const params = new URLSearchParams();
+    params.set('nom', recipient);
+    params.set('id', inviteId);
+    params.set('main', mainOption);
+
+    if (descriptions[mainOption]) {
+        params.set('main_desc', descriptions[mainOption]);
+    }
+
+    if (altOptions.size > 0) {
+        params.set('alt', Array.from(altOptions).join(','));
+        const altDescPairs = Array.from(altOptions)
+            .filter(opt => descriptions[opt])
+            .map(opt => `${opt}::${descriptions[opt]}`);
+        if (altDescPairs.length > 0) {
+            params.set('alt_desc', altDescPairs.join('||'));
+        }
+    }
+
+    const finalUrl = BASE_URL + '?' + params.toString();
+
+    document.getElementById('resultUrl').textContent = finalUrl;
+    document.getElementById('resultBox').classList.add('active');
+
+    const whatsappText = encodeURIComponent(`Hey ${recipient} 👀 j'ai une question pour toi : ${finalUrl}`);
+    document.getElementById('sendWhatsapp').href = `https://wa.me/?text=${whatsappText}`;
+
+    window._lastGeneratedUrl = finalUrl;
+}
+
+function copyLink() {
+    if (window._lastGeneratedUrl) {
+        navigator.clipboard.writeText(window._lastGeneratedUrl);
+        alert('Lien copié ✓');
+    }
+}
+
+renderOptions();
+</script>
+
+</body>
+</html>

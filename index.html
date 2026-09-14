@@ -136,6 +136,32 @@
     .plan-meta { font-size: 13px; color: #9A8768; margin-bottom: 20px; }
     .plan-brief { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #B08D57; line-height: 1.7; margin-bottom: 26px; }
 
+    /* ============ OPTIONS ALTERNATIVES ============ */
+    .alt-options-panel {
+        margin-bottom: 26px;
+        text-align: left;
+    }
+    .alt-options-label {
+        font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+        color: #B08D57; margin-bottom: 10px; text-align: center;
+    }
+    .alt-option-card {
+        border: 1px solid #D8C9AC;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        background: #FFFDF8;
+    }
+    .alt-option-card:hover { border-color: #7A1F2B; }
+    .alt-option-card.selected {
+        background: #E8D5D9;
+        border-color: #7A1F2B;
+    }
+    .alt-option-name { font-size: 14px; font-weight: bold; color: #3A1F1F; }
+    .alt-option-desc { font-size: 12px; color: #9A8768; font-style: italic; margin-top: 4px; }
+
     .time-slots { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
     .time-slot {
         padding: 10px 18px; border: 1px solid #D8C9AC; border-radius: 4px;
@@ -167,17 +193,6 @@
     #stageSuccess.active { display: flex; }
     .success-title { font-size: 26px; font-style: italic; color: #7A1F2B; margin-bottom: 10px; }
     .success-text { font-size: 14px; color: #8A7050; text-align: center; max-width: 400px; }
-
-    .bottom-bar {
-        display: flex; gap: 16px; justify-content: center;
-        padding: 24px; background: #F5EFE3; border-top: 1px solid #E8DCC5;
-    }
-    .bottom-bar.hidden { display: none; }
-    .btn-outline {
-        padding: 14px 34px; background: transparent; border: 1px solid #D8C9AC;
-        color: #8A7050; border-radius: 4px; font-size: 13px; letter-spacing: 1px;
-        text-transform: uppercase; cursor: pointer;
-    }
 </style>
 </head>
 <body>
@@ -198,7 +213,7 @@
     <!-- ETAPE 2 : QUESTION OUI/NON -->
     <div class="stage" id="stageInvite">
         <div class="invite-card">
-            <div class="invite-to">Pour toi, <span id="recipientName">Aliman</span></div>
+            <div class="invite-to">Pour toi, <span id="recipientName">toi</span></div>
             <div class="invite-question">Ça te dit un date<br>avec moi ?</div>
             <div class="invite-subtext">(dire non ne sert à rien, mais tu peux essayer)</div>
             <div class="invite-buttons" id="buttonZone">
@@ -213,12 +228,12 @@
         <div class="plan-card">
             <div class="plan-label">Parfait</div>
             <div class="plan-title">Voilà le plan</div>
-            <div class="plan-mission">Mission Montmartre (Niveau : Confidentiel)</div>
-            <div class="plan-meta">Point de ralliement : Sortie du métro Abbesses</div>
-            <div class="plan-brief">
-                Samedi 19 septembre — Prérequis : un bon sens de<br>
-                l'orientation, beaucoup de second degré et un<br>
-                stylo. Le perdant paie les cafés.
+            <div class="plan-mission" id="mainOptionName">Mission Montmartre</div>
+            <div class="plan-meta" id="mainOptionDesc">Point de ralliement : Sortie du métro Abbesses</div>
+
+            <div class="alt-options-panel" id="altOptionsPanel" style="display:none;">
+                <div class="alt-options-label">Ou si tu préfères...</div>
+                <div id="altOptionsList"></div>
             </div>
 
             <div class="time-slots" id="timeSlots">
@@ -246,16 +261,78 @@
 
 <script>
 let selectedTime = null;
+let selectedOption = null;
+let altOptionsData = [];
 let dodgeCount = 0;
+
+const urlParams = new URLSearchParams(window.location.search);
+
 let inviteData = {
-    invite_id: new URLSearchParams(window.location.search).get('id') || 'inconnu',
-    recipient: 'Aliman',
+    invite_id: urlParams.get('id') || 'inconnu',
+    recipient: urlParams.get('nom') || 'toi',
     choice: null,
     dodge_attempts: 0,
+    selected_option: null,
     selected_time: null,
     note: '',
     timestamp: null,
 };
+
+// ============================================================
+// LECTURE DES PARAMETRES D'OPTIONS (venant de creer.html)
+// ============================================================
+function parseAltOptions() {
+    const altNames = (urlParams.get('alt') || '').split(',').filter(Boolean);
+    const altDescRaw = urlParams.get('alt_desc') || '';
+    const altDescMap = {};
+
+    altDescRaw.split('||').filter(Boolean).forEach(pair => {
+        const [name, desc] = pair.split('::');
+        if (name) altDescMap[name] = desc || '';
+    });
+
+    return altNames.map(name => ({
+        name: name,
+        desc: altDescMap[name] || ''
+    }));
+}
+
+function initPlanContent() {
+    const mainName = urlParams.get('main') || 'Mission Montmartre';
+    const mainDesc = urlParams.get('main_desc') || 'Point de ralliement : Sortie du métro Abbesses';
+
+    document.getElementById('mainOptionName').textContent = mainName;
+    document.getElementById('mainOptionDesc').textContent = mainDesc;
+    selectedOption = mainName;
+    inviteData.selected_option = mainName;
+
+    altOptionsData = parseAltOptions();
+
+    if (altOptionsData.length > 0) {
+        const panel = document.getElementById('altOptionsPanel');
+        const list = document.getElementById('altOptionsList');
+        panel.style.display = 'block';
+        list.innerHTML = '';
+
+        altOptionsData.forEach(opt => {
+            const card = document.createElement('div');
+            card.className = 'alt-option-card';
+            card.innerHTML = `
+                <div class="alt-option-name">${opt.name}</div>
+                ${opt.desc ? `<div class="alt-option-desc">${opt.desc}</div>` : ''}
+            `;
+            card.onclick = () => selectAltOption(opt.name, card);
+            list.appendChild(card);
+        });
+    }
+}
+
+function selectAltOption(name, cardEl) {
+    document.querySelectorAll('.alt-option-card').forEach(c => c.classList.remove('selected'));
+    cardEl.classList.add('selected');
+    selectedOption = name;
+    inviteData.selected_option = name;
+}
 
 // ============================================================
 // ETAPE 1 -> 2 : ouverture de l'enveloppe
@@ -329,13 +406,11 @@ function confirmPlan() {
     }
 
     inviteData.selected_time = selectedTime;
+    inviteData.selected_option = selectedOption;
     inviteData.note = document.getElementById('noteInput').value;
     inviteData.timestamp = new Date().toISOString();
 
-    // --- Sauvegarde locale (fonctionne toujours, sans backend) ---
     localStorage.setItem('dis_oui_response_' + inviteData.invite_id, JSON.stringify(inviteData));
-
-    // --- Envoi vers un backend gratuit (voir options dans sendResponseToBackend) ---
     sendResponseToBackend(inviteData);
 
     console.log('Réponse finale capturée :', inviteData);
@@ -343,41 +418,33 @@ function confirmPlan() {
     document.getElementById('stagePlan').classList.remove('active');
     document.getElementById('stageSuccess').classList.add('active');
     document.getElementById('successMessage').textContent =
-        `Créneau choisi : ${selectedTime}. Il/elle va recevoir ta réponse tout de suite.`;
+        `${selectedOption} à ${selectedTime}. Il/elle va recevoir ta réponse tout de suite.`;
 }
 
 function sendResponseToBackend(data) {
-    // OPTION A - Airtable webhook (gratuit)
+    // OPTION A - Airtable webhook (bloqué par CORS, desactive)
     /*
-
-    fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/appQyL0UDyZxS5gkT/wfldsewJA3urWTFoU/wtrOdZ10XjxAzNKBP', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({test: 'bonjour'})
-}).then(r => r.json()).then(d => console.log('SUCCESS:', d)).catch(e => console.log('ERREUR:', e));
-
+    fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/TON_ID_ICI', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    });
     */
 
-    // OPTION B - Formspree (gratuit jusqu'a ~50 soumissions/mois)
-
+    // OPTION B - Formspree (actif)
     fetch('https://formspree.io/f/xpwyakdv', {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
         body: JSON.stringify(data)
     });
-    
 }
 
 // ============================================================
-// Personnalisation du prenom via l'URL (?nom=Camille)
+// Initialisation au chargement de la page
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const nom = urlParams.get('nom');
-    if (nom) {
-        document.getElementById('recipientName').textContent = nom;
-        inviteData.recipient = nom;
-    }
+    document.getElementById('recipientName').textContent = inviteData.recipient;
+    initPlanContent();
 });
 </script>
 
