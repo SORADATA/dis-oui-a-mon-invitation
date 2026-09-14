@@ -2,19 +2,21 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Créer mon invitation — Dis Oui</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         font-family: 'Georgia', 'Times New Roman', serif;
         background: #EDE3D3;
-        color: #3A1F1F;
+        color: #2A1414;
         min-height: 100vh;
         padding: 40px 20px 120px;
+        font-size: 16px;
     }
     .top-banner {
         background: #7A1F2B;
-        color: #F5EFE3;
+        color: #FFFFFF;
         text-align: center;
         padding: 14px;
         font-size: 13px;
@@ -28,69 +30,88 @@
     .container {
         max-width: 640px;
         margin: 70px auto 0;
-        background: #F5EFE3;
-        border: 1px solid #D8C9AC;
+        background: #FFFDF9;
+        border: 1px solid #C9B896;
         border-radius: 6px;
-        padding: 40px;
+        padding: 28px 24px;
         box-shadow: 0 20px 60px rgba(58,31,31,0.12);
     }
+    @media (min-width: 500px) {
+        .container { padding: 40px; }
+    }
+    .step-label {
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #8A6B3F;
+        text-align: center;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
     h1 {
-        font-size: 26px;
+        font-size: 24px;
         font-style: italic;
         color: #7A1F2B;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         text-align: center;
+        line-height: 1.3;
     }
     .subtitle {
         text-align: center;
-        font-size: 13px;
-        color: #9A8768;
+        font-size: 14px;
+        color: #5C4A2E;
         margin-bottom: 30px;
+        line-height: 1.5;
     }
     .field-label {
-        font-size: 11px;
-        letter-spacing: 1.5px;
+        font-size: 13px;
+        font-weight: bold;
+        letter-spacing: 1px;
         text-transform: uppercase;
-        color: #B08D57;
-        margin-bottom: 8px;
+        color: #7A5A2E;
+        margin-bottom: 10px;
         margin-top: 24px;
         display: block;
     }
     .field-label:first-of-type { margin-top: 0; }
-    input[type="text"] {
+    input[type="text"], input[type="email"] {
         width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #D8C9AC;
+        padding: 14px 14px;
+        border: 1.5px solid #C9B896;
         border-radius: 4px;
-        background: #FFFDF8;
+        background: #FFFFFF;
         font-family: 'Georgia', serif;
-        font-size: 15px;
-        color: #3A1F1F;
+        font-size: 16px;
+        color: #2A1414;
         outline: none;
     }
-    input[type="text"]:focus { border-color: #7A1F2B; }
+    input[type="text"]:focus, input[type="email"]:focus { border-color: #7A1F2B; }
+    input::placeholder { color: #9C8B6F; }
+
     textarea {
         width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #D8C9AC;
+        padding: 12px 14px;
+        border: 1.5px solid #C9B896;
         border-radius: 4px;
-        background: #FFFDF8;
+        background: #FFFFFF;
         font-family: 'Georgia', serif;
-        font-style: italic;
-        font-size: 13px;
-        color: #3A1F1F;
+        font-size: 15px;
+        color: #2A1414;
         outline: none;
         resize: vertical;
-        min-height: 44px;
+        min-height: 52px;
+        line-height: 1.5;
     }
     textarea:focus { border-color: #7A1F2B; }
+    textarea::placeholder { color: #9C8B6F; font-style: italic; }
 
     .required-tag {
         display: inline-block;
         background: #7A1F2B;
-        color: #F5EFE3;
-        font-size: 9px;
-        padding: 2px 8px;
+        color: #FFFFFF;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 3px 9px;
         border-radius: 10px;
         margin-left: 8px;
         letter-spacing: 0.5px;
@@ -99,10 +120,11 @@
     .optional-tag {
         display: inline-block;
         background: transparent;
-        color: #B08D57;
-        border: 1px solid #D8C9AC;
-        font-size: 9px;
-        padding: 2px 8px;
+        color: #7A5A2E;
+        border: 1.5px solid #C9B896;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 3px 9px;
         border-radius: 10px;
         margin-left: 8px;
         letter-spacing: 0.5px;
@@ -116,12 +138,13 @@
         margin-top: 10px;
     }
     .option-chip {
-        padding: 10px 16px;
-        border: 1px solid #D8C9AC;
+        padding: 11px 16px;
+        border: 1.5px solid #C9B896;
         border-radius: 20px;
-        background: #FFFDF8;
-        font-size: 13px;
-        color: #3A1F1F;
+        background: #FFFFFF;
+        font-size: 14px;
+        font-weight: 500;
+        color: #2A1414;
         cursor: pointer;
         transition: all 0.15s ease;
         user-select: none;
@@ -129,14 +152,15 @@
     .option-chip:hover { border-color: #7A1F2B; }
     .option-chip.selected-main {
         background: #7A1F2B;
-        color: #F5EFE3;
+        color: #FFFFFF;
         border-color: #7A1F2B;
         font-weight: bold;
     }
     .option-chip.selected-alt {
-        background: #E8D5D9;
-        color: #7A1F2B;
-        border-color: #B08D9A;
+        background: #D9A8B4;
+        color: #4A0F17;
+        border-color: #7A1F2B;
+        font-weight: bold;
     }
     .option-chip .chip-star { margin-right: 4px; }
 
@@ -147,133 +171,228 @@
     }
     .add-option-row input {
         flex: 1;
-        padding: 10px 12px;
-        border: 1px dashed #D8C9AC;
+        padding: 12px 12px;
+        border: 1.5px dashed #C9B896;
         border-radius: 4px;
         background: transparent;
         font-family: 'Georgia', serif;
-        font-size: 13px;
+        font-size: 14px;
         outline: none;
     }
     .btn-add {
         padding: 10px 18px;
-        background: transparent;
-        border: 1px solid #B08D57;
-        color: #B08D57;
+        background: #7A5A2E;
+        border: none;
+        color: #FFFFFF;
         border-radius: 4px;
-        font-size: 13px;
+        font-size: 14px;
+        font-weight: bold;
         cursor: pointer;
         white-space: nowrap;
     }
-    .btn-add:hover { background: #B08D57; color: #F5EFE3; }
+    .btn-add:hover { background: #5C441F; }
 
     .legend {
-        font-size: 11px;
-        color: #9A8768;
-        margin-top: 10px;
-        font-style: italic;
+        font-size: 13px;
+        color: #5C4A2E;
+        margin-top: 12px;
+        line-height: 1.5;
     }
 
-    /* ============ ZONE DESCRIPTIONS ============ */
     .descriptions-panel {
         margin-top: 24px;
         padding-top: 20px;
-        border-top: 1px dashed #D8C9AC;
+        border-top: 1.5px dashed #C9B896;
     }
     .description-item {
         margin-bottom: 16px;
         padding: 14px;
-        background: #FFFDF8;
-        border: 1px solid #E8DCC5;
+        background: #FFFFFF;
+        border: 1.5px solid #DDD0B5;
         border-radius: 6px;
     }
     .description-item-header {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
     }
     .description-item-name {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: bold;
-        color: #3A1F1F;
+        color: #2A1414;
     }
     .description-badge-main {
-        font-size: 9px;
+        font-size: 10px;
+        font-weight: bold;
         background: #7A1F2B;
-        color: #F5EFE3;
-        padding: 2px 8px;
+        color: #FFFFFF;
+        padding: 3px 9px;
         border-radius: 10px;
         letter-spacing: 0.5px;
     }
     .description-badge-alt {
-        font-size: 9px;
-        border: 1px solid #B08D9A;
+        font-size: 10px;
+        font-weight: bold;
+        border: 1.5px solid #7A1F2B;
         color: #7A1F2B;
-        padding: 2px 8px;
+        padding: 3px 9px;
         border-radius: 10px;
         letter-spacing: 0.5px;
     }
     .no-selection-hint {
-        font-size: 12px;
-        color: #B0A088;
+        font-size: 13px;
+        color: #7A5A2E;
         font-style: italic;
         text-align: center;
-        padding: 10px;
+        padding: 14px;
+        background: #FFFFFF;
+        border: 1px dashed #C9B896;
+        border-radius: 6px;
     }
 
-    .btn-generate {
-        width: 100%;
+    .time-chip-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .time-chip {
+        padding: 10px 18px;
+        border: 1.5px solid #C9B896;
+        border-radius: 20px;
+        background: #FFFFFF;
+        font-size: 14px;
+        font-weight: 500;
+        color: #2A1414;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+    .time-chip:hover { border-color: #7A1F2B; }
+    .time-chip.selected { background: #7A1F2B; color: #FFFFFF; border-color: #7A1F2B; font-weight: bold; }
+
+    .btn-nav-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 34px;
+    }
+    .btn-generate, .btn-back {
+        flex: 1;
         padding: 16px;
-        background: #7A1F2B;
-        color: #F5EFE3;
         border: none;
         border-radius: 4px;
         font-size: 14px;
+        font-weight: bold;
         letter-spacing: 1px;
         text-transform: uppercase;
         cursor: pointer;
-        margin-top: 34px;
         transition: background 0.2s;
     }
+    .btn-generate { background: #7A1F2B; color: #FFFFFF; }
     .btn-generate:hover { background: #5E1620; }
-    .btn-generate:disabled { background: #C9B8B0; cursor: not-allowed; }
+    .btn-back { background: #FFFFFF; border: 1.5px solid #C9B896; color: #5C4A2E; }
+
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .recap-box {
+        background: #FFFFFF;
+        border: 1.5px solid #C9B896;
+        border-radius: 6px;
+        padding: 18px;
+        margin-bottom: 24px;
+    }
+    .recap-line {
+        font-size: 15px;
+        color: #2A1414;
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+    .recap-line strong { color: #7A1F2B; }
+    .recap-alt {
+        font-size: 13px;
+        color: #5C4A2E;
+        margin-top: 6px;
+        line-height: 1.5;
+    }
+
+    .checkbox-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: #FFFFFF;
+        border: 1.5px solid #C9B896;
+        border-radius: 6px;
+        padding: 16px;
+        margin-top: 24px;
+    }
+    .checkbox-row input[type="checkbox"] {
+        margin-top: 3px;
+        width: 20px;
+        height: 20px;
+        accent-color: #7A1F2B;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+    .checkbox-text {
+        font-size: 14px;
+        color: #2A1414;
+        line-height: 1.5;
+        font-weight: 500;
+    }
+    .checkbox-hint {
+        font-size: 12px;
+        color: #5C4A2E;
+        margin-top: 4px;
+        line-height: 1.4;
+    }
+
+    .field-hint {
+        font-size: 12px;
+        color: #5C4A2E;
+        margin-top: 8px;
+        line-height: 1.4;
+    }
 
     .result-box {
-        display: none;
-        margin-top: 26px;
+        margin-top: 10px;
         padding: 20px;
-        background: #FFFDF8;
-        border: 1px solid #D8C9AC;
+        background: #FFFFFF;
+        border: 1.5px solid #C9B896;
         border-radius: 6px;
     }
-    .result-box.active { display: block; }
     .result-label {
-        font-size: 11px;
+        font-size: 12px;
+        font-weight: bold;
         letter-spacing: 1px;
         text-transform: uppercase;
-        color: #B08D57;
+        color: #7A5A2E;
         margin-bottom: 10px;
     }
     .result-url {
         font-family: monospace;
         font-size: 13px;
-        color: #3A1F1F;
+        color: #2A1414;
         word-break: break-all;
         padding: 12px;
         background: #EDE3D3;
         border-radius: 4px;
         margin-bottom: 14px;
+        line-height: 1.5;
     }
     .result-actions {
         display: flex;
         gap: 10px;
+        flex-wrap: wrap;
     }
     .btn-copy, .btn-send {
         flex: 1;
-        padding: 12px;
+        min-width: 140px;
+        padding: 13px;
         border-radius: 4px;
         font-size: 13px;
+        font-weight: bold;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         cursor: pointer;
@@ -282,7 +401,7 @@
         text-decoration: none;
         display: block;
     }
-    .btn-copy { background: transparent; border: 1px solid #D8C9AC; color: #8A7050; }
+    .btn-copy { background: #FFFFFF; border: 1.5px solid #C9B896; color: #5C4A2E; }
     .btn-send { background: #25D366; color: white; }
 </style>
 </head>
@@ -291,40 +410,81 @@
     <div class="top-banner">Créer ton invitation — Dis Oui</div>
 
     <div class="container">
-        <h1>Configure ton invitation</h1>
-        <div class="subtitle">Choisis une option principale, ajoute des alternatives, puis génère le lien.</div>
 
-        <label class="field-label">Prénom du/de la destinataire</label>
-        <input type="text" id="recipientInput" placeholder="Ex : Camille">
+        <!-- ETAPE 1 : CONFIGURATION -->
+        <div class="step active" id="step1">
+            <div class="step-label">Étape 1 sur 2</div>
+            <h1>Configure ton invitation</h1>
+            <div class="subtitle">Choisis une option principale, ajoute des alternatives.</div>
 
-        <label class="field-label">
-            Options de sortie
-            <span class="required-tag">1 obligatoire</span>
-            <span class="optional-tag">+ facultatives</span>
-        </label>
-        <div class="options-grid" id="optionsGrid"></div>
+            <label class="field-label">Prénom du/de la destinataire</label>
+            <input type="text" id="recipientInput" placeholder="Ex : Camille">
 
-        <div class="add-option-row">
-            <input type="text" id="newOptionInput" placeholder="Ajouter une option personnalisée...">
-            <button class="btn-add" onclick="addCustomOption()">+ Ajouter</button>
-        </div>
-        <div class="legend">Clique une fois = option principale (★ obligatoire). Reclique = option alternative. Re-reclique = désélectionner.</div>
+            <label class="field-label">
+                Options de sortie
+                <span class="required-tag">1 obligatoire</span>
+                <span class="optional-tag">+ facultatives</span>
+            </label>
+            <div class="options-grid" id="optionsGrid"></div>
 
-        <div class="descriptions-panel" id="descriptionsPanel">
-            <label class="field-label" style="margin-top:0;">Décris chaque option choisie (facultatif)</label>
-            <div id="descriptionsList"></div>
-        </div>
+            <div class="add-option-row">
+                <input type="text" id="newOptionInput" placeholder="Ajouter une option personnalisée...">
+                <button class="btn-add" onclick="addCustomOption()">+ Ajouter</button>
+            </div>
+            <div class="legend">Clique une fois = option principale (★ obligatoire). Reclique = alternative. Re-reclique = désélectionner.</div>
 
-        <button class="btn-generate" id="btnGenerate" onclick="generateLink()">Générer le lien</button>
+            <div class="descriptions-panel" id="descriptionsPanel">
+                <label class="field-label" style="margin-top:0;">Décris chaque option choisie (facultatif)</label>
+                <div id="descriptionsList"></div>
+            </div>
 
-        <div class="result-box" id="resultBox">
-            <div class="result-label">Ton lien est prêt</div>
-            <div class="result-url" id="resultUrl"></div>
-            <div class="result-actions">
-                <button class="btn-copy" onclick="copyLink()">Copier le lien</button>
-                <a class="btn-send" id="sendWhatsapp" href="#" target="_blank">Envoyer par WhatsApp</a>
+            <label class="field-label">Créneaux horaires proposés</label>
+            <div class="time-chip-grid" id="timeChipGrid"></div>
+            <div class="field-hint">Sélectionne les créneaux que tu veux proposer.</div>
+
+            <div class="btn-nav-row">
+                <button class="btn-generate" onclick="goToStep2()">Continuer</button>
             </div>
         </div>
+
+        <!-- ETAPE 2 : RECAP + MOT + EMAIL -->
+        <div class="step" id="step2">
+            <div class="step-label">Étape 2 sur 2</div>
+            <h1>Le mot de la fin</h1>
+            <div class="subtitle">Vérifie tout, ajoute ton mot, puis génère le lien.</div>
+
+            <div class="recap-box" id="recapBox"></div>
+
+            <label class="field-label">Ton petit mot sur la carte</label>
+            <textarea id="finalNoteInput" rows="4" placeholder="Écris un petit mot qui accompagnera ton invitation..."></textarea>
+
+            <label class="field-label">Ton email</label>
+            <input type="email" id="creatorEmailInput" placeholder="toi@example.com">
+            <div class="field-hint">Pour être prévenu·e dès que la personne répond.</div>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="confirmCheckbox">
+                <div>
+                    <div class="checkbox-text">Je confirme les informations ci-dessus et je veux générer mon lien.</div>
+                    <div class="checkbox-hint">Le lien sera prêt immédiatement, à copier ou envoyer par WhatsApp.</div>
+                </div>
+            </div>
+
+            <div class="btn-nav-row">
+                <button class="btn-back" onclick="goToStep1()">Retour</button>
+                <button class="btn-generate" id="btnGenerateFinal" onclick="generateLink()">Générer le lien</button>
+            </div>
+
+            <div class="result-box" id="resultBox" style="display:none;">
+                <div class="result-label">Ton lien est prêt</div>
+                <div class="result-url" id="resultUrl"></div>
+                <div class="result-actions">
+                    <button class="btn-copy" onclick="copyLink()">Copier le lien</button>
+                    <a class="btn-send" id="sendWhatsapp" href="#" target="_blank">Envoyer par WhatsApp</a>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 <script>
@@ -336,11 +496,13 @@ const defaultOptions = [
     "Plage", "Randonnée", "Aquarium", "Patinoire", "Concert",
     "Brunch", "Vélo", "Kayak", "Accrobranche", "Marché nocturne"
 ];
+const defaultTimes = ["11:00", "13:00", "17:00", "19:00", "21:00"];
 
 let allOptions = [...defaultOptions];
 let mainOption = null;
 let altOptions = new Set();
 let descriptions = {};
+let selectedTimes = new Set(defaultTimes);
 
 function renderOptions() {
     const grid = document.getElementById('optionsGrid');
@@ -400,7 +562,7 @@ function renderDescriptions() {
         `;
 
         const textarea = document.createElement('textarea');
-        textarea.placeholder = `Ex : ${name === 'Montmartre' ? 'RDV sortie métro Abbesses, tenue confortable, on marche pas mal !' : 'Décris le lieu, l\'heure approximative, l\'ambiance...'}`;
+        textarea.placeholder = `Décris le lieu, l'heure approximative, l'ambiance...`;
         textarea.value = descriptions[name] || '';
         textarea.addEventListener('input', (e) => {
             descriptions[name] = e.target.value;
@@ -421,14 +583,28 @@ function addCustomOption() {
         renderOptions();
     }
 }
-
 document.getElementById('newOptionInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addCustomOption();
 });
 
-function generateLink() {
-    const recipient = document.getElementById('recipientInput').value.trim();
+function renderTimeChips() {
+    const grid = document.getElementById('timeChipGrid');
+    grid.innerHTML = '';
+    defaultTimes.forEach(time => {
+        const chip = document.createElement('div');
+        chip.className = 'time-chip' + (selectedTimes.has(time) ? ' selected' : '');
+        chip.textContent = time;
+        chip.onclick = () => {
+            if (selectedTimes.has(time)) selectedTimes.delete(time);
+            else selectedTimes.add(time);
+            renderTimeChips();
+        };
+        grid.appendChild(chip);
+    });
+}
 
+function goToStep2() {
+    const recipient = document.getElementById('recipientInput').value.trim();
     if (!recipient) {
         alert('Ajoute le prénom du/de la destinataire 😊');
         return;
@@ -437,6 +613,48 @@ function generateLink() {
         alert('Choisis une option obligatoire (clique une fois sur une option pour la rendre principale ★)');
         return;
     }
+    if (selectedTimes.size === 0) {
+        alert('Sélectionne au moins un créneau horaire');
+        return;
+    }
+
+    renderRecap();
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+function goToStep1() {
+    document.getElementById('step2').classList.remove('active');
+    document.getElementById('step1').classList.add('active');
+    window.scrollTo(0, 0);
+}
+
+function renderRecap() {
+    const recipient = document.getElementById('recipientInput').value.trim();
+    const timesList = Array.from(selectedTimes).sort().join(' · ');
+    const altList = Array.from(altOptions);
+
+    let html = `
+        <div class="recap-line">Pour <strong>${recipient}</strong> · <strong>${mainOption}</strong></div>
+        <div class="recap-line">Créneaux : ${timesList}</div>
+    `;
+    if (altList.length > 0) {
+        html += `<div class="recap-alt">Alternatives proposées : ${altList.join(', ')}</div>`;
+    }
+    document.getElementById('recapBox').innerHTML = html;
+}
+
+function generateLink() {
+    const confirmChecked = document.getElementById('confirmCheckbox').checked;
+    if (!confirmChecked) {
+        alert('Coche la case de confirmation pour générer le lien 😊');
+        return;
+    }
+
+    const recipient = document.getElementById('recipientInput').value.trim();
+    const note = document.getElementById('finalNoteInput').value.trim();
+    const creatorEmail = document.getElementById('creatorEmailInput').value.trim();
 
     const inviteId = 'inv' + Date.now().toString(36);
     const params = new URLSearchParams();
@@ -444,8 +662,12 @@ function generateLink() {
     params.set('id', inviteId);
     params.set('main', mainOption);
 
-    if (descriptions[mainOption]) {
-        params.set('main_desc', descriptions[mainOption]);
+    if (descriptions[mainOption]) params.set('main_desc', descriptions[mainOption]);
+    if (note) params.set('msg', note);
+    if (creatorEmail) params.set('creator_email', creatorEmail);
+
+    if (selectedTimes.size > 0) {
+        params.set('times', Array.from(selectedTimes).sort().join(','));
     }
 
     if (altOptions.size > 0) {
@@ -461,7 +683,7 @@ function generateLink() {
     const finalUrl = BASE_URL + '?' + params.toString();
 
     document.getElementById('resultUrl').textContent = finalUrl;
-    document.getElementById('resultBox').classList.add('active');
+    document.getElementById('resultBox').style.display = 'block';
 
     const whatsappText = encodeURIComponent(`Hey ${recipient} 👀 j'ai une question pour toi : ${finalUrl}`);
     document.getElementById('sendWhatsapp').href = `https://wa.me/?text=${whatsappText}`;
@@ -477,6 +699,7 @@ function copyLink() {
 }
 
 renderOptions();
+renderTimeChips();
 </script>
 
 </body>

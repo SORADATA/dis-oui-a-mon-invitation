@@ -2,22 +2,24 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dis Oui — l'invitation à un date qu'on ne peut pas refuser</title>
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
         font-family: 'Georgia', 'Times New Roman', serif;
         background: #EDE3D3;
-        color: #3A1F1F;
+        color: #2A1414;
         min-height: 100vh;
         display: flex;
         flex-direction: column;
         overflow-x: hidden;
+        font-size: 16px;
     }
 
     .top-banner {
         background: #7A1F2B;
-        color: #F5EFE3;
+        color: #FFFFFF;
         text-align: center;
         padding: 14px;
         font-size: 13px;
@@ -32,7 +34,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 60px 20px;
+        padding: 40px 18px;
         min-height: 70vh;
         position: relative;
     }
@@ -42,14 +44,14 @@
     #stageEnvelope.hidden { display: none; }
 
     .envelope {
-        width: 320px;
-        height: 220px;
-        background: #F5EFE3;
-        border: 1px solid #D8C9AC;
+        width: 300px;
+        height: 200px;
+        background: #FFFDF9;
+        border: 1.5px solid #C9B896;
         border-radius: 4px;
         position: relative;
         cursor: pointer;
-        box-shadow: 0 20px 50px rgba(58,31,31,0.12);
+        box-shadow: 0 20px 50px rgba(58,31,31,0.14);
         transition: transform 0.2s ease;
     }
     .envelope:hover { transform: translateY(-4px); }
@@ -58,9 +60,9 @@
         position: absolute;
         top: 0; left: 0; right: 0;
         height: 0;
-        border-left: 160px solid transparent;
-        border-right: 160px solid transparent;
-        border-top: 110px solid #E8DCC5;
+        border-left: 150px solid transparent;
+        border-right: 150px solid transparent;
+        border-top: 100px solid #EDE0C8;
     }
     .seal {
         position: absolute;
@@ -70,18 +72,19 @@
         background: #7A1F2B;
         border-radius: 50%;
         display: flex; align-items: center; justify-content: center;
-        color: #F5EFE3;
+        color: #FFFFFF;
         font-size: 20px;
         z-index: 2;
-        box-shadow: 0 4px 10px rgba(58,31,31,0.3);
+        box-shadow: 0 4px 10px rgba(58,31,31,0.35);
     }
     .envelope-hint {
         margin-top: 24px;
         text-align: center;
-        font-size: 12px;
+        font-size: 13px;
+        font-weight: bold;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: #B08D57;
+        color: #7A5A2E;
     }
     .envelope-arrow { font-size: 18px; display: block; margin-bottom: 6px; animation: bounce 1.5s infinite; }
     @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -91,50 +94,63 @@
     #stageInvite.active { display: flex; }
 
     .invite-card {
-        background: #F5EFE3;
-        border: 1px solid #D8C9AC;
+        background: #FFFDF9;
+        border: 1.5px solid #C9B896;
         border-radius: 6px;
-        padding: 50px 60px;
+        padding: 40px 28px;
         text-align: center;
-        max-width: 480px;
+        max-width: 460px;
         width: 100%;
-        box-shadow: 0 20px 60px rgba(58,31,31,0.15);
+        box-shadow: 0 20px 60px rgba(58,31,31,0.16);
         position: relative;
     }
     .invite-to {
-        font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
-        color: #8A7050; margin-bottom: 14px;
+        font-size: 13px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;
+        color: #7A5A2E; margin-bottom: 16px;
     }
+    .invite-message {
+        font-size: 14px;
+        color: #5C4A2E;
+        font-style: italic;
+        margin-bottom: 20px;
+        padding: 12px 16px;
+        background: #F5EDD9;
+        border-radius: 6px;
+        border-left: 3px solid #B08D57;
+        text-align: left;
+        line-height: 1.5;
+        display: none;
+    }
+    .invite-message.active { display: block; }
     .invite-question {
-        font-size: 30px; font-style: italic; color: #7A1F2B;
-        line-height: 1.35; margin-bottom: 10px;
+        font-size: 28px; font-style: italic; color: #7A1F2B;
+        line-height: 1.35; margin-bottom: 12px;
     }
-    .invite-subtext { font-size: 13px; color: #9A8768; font-style: italic; margin-bottom: 36px; }
+    .invite-subtext { font-size: 14px; color: #5C4A2E; font-style: italic; margin-bottom: 36px; }
     .invite-buttons { display: flex; gap: 20px; justify-content: center; position: relative; height: 60px; }
-    .btn { padding: 14px 34px; border-radius: 4px; font-size: 15px; font-weight: bold; cursor: pointer; transition: transform 0.15s ease; letter-spacing: 0.5px; border: none; }
+    .btn { padding: 14px 32px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.15s ease; letter-spacing: 0.5px; border: none; }
     .btn:hover { transform: translateY(-2px); }
-    .btn-yes { background: #7A1F2B; color: #F5EFE3; }
-    .btn-no { background: transparent; color: #9A8768; border: 1px solid #D8C9AC; position: absolute; transition: transform 0.25s ease-out; }
+    .btn-yes { background: #7A1F2B; color: #FFFFFF; }
+    .btn-no { background: #FFFFFF; color: #5C4A2E; border: 1.5px solid #C9B896; position: absolute; transition: transform 0.25s ease-out; }
 
     /* ============ ETAPE 3 : PLAN + CONFIRMATION ============ */
     #stagePlan { display: none; }
     #stagePlan.active { display: flex; }
 
     .plan-card {
-        background: #F5EFE3;
-        border: 1px solid #D8C9AC;
+        background: #FFFDF9;
+        border: 1.5px solid #C9B896;
         border-radius: 6px;
-        padding: 44px 50px;
+        padding: 36px 26px;
         text-align: center;
-        max-width: 520px;
+        max-width: 500px;
         width: 100%;
-        box-shadow: 0 20px 60px rgba(58,31,31,0.15);
+        box-shadow: 0 20px 60px rgba(58,31,31,0.16);
     }
-    .plan-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #B08D57; margin-bottom: 14px; }
-    .plan-title { font-size: 30px; font-style: italic; color: #7A1F2B; margin-bottom: 18px; }
-    .plan-mission { font-size: 16px; color: #3A1F1F; margin-bottom: 4px; }
-    .plan-meta { font-size: 13px; color: #9A8768; margin-bottom: 20px; }
-    .plan-brief { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #B08D57; line-height: 1.7; margin-bottom: 26px; }
+    .plan-label { font-size: 12px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #7A5A2E; margin-bottom: 14px; }
+    .plan-title { font-size: 28px; font-style: italic; color: #7A1F2B; margin-bottom: 18px; }
+    .plan-mission { font-size: 17px; font-weight: bold; color: #2A1414; margin-bottom: 6px; }
+    .plan-meta { font-size: 14px; color: #5C4A2E; margin-bottom: 20px; line-height: 1.5; }
 
     /* ============ OPTIONS ALTERNATIVES ============ */
     .alt-options-panel {
@@ -142,47 +158,47 @@
         text-align: left;
     }
     .alt-options-label {
-        font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
-        color: #B08D57; margin-bottom: 10px; text-align: center;
+        font-size: 12px; font-weight: bold; letter-spacing: 1.5px; text-transform: uppercase;
+        color: #7A5A2E; margin-bottom: 12px; text-align: center;
     }
     .alt-option-card {
-        border: 1px solid #D8C9AC;
+        border: 1.5px solid #C9B896;
         border-radius: 6px;
-        padding: 12px 16px;
+        padding: 14px 16px;
         margin-bottom: 8px;
         cursor: pointer;
         transition: all 0.15s ease;
-        background: #FFFDF8;
+        background: #FFFFFF;
     }
     .alt-option-card:hover { border-color: #7A1F2B; }
     .alt-option-card.selected {
-        background: #E8D5D9;
+        background: #D9A8B4;
         border-color: #7A1F2B;
     }
-    .alt-option-name { font-size: 14px; font-weight: bold; color: #3A1F1F; }
-    .alt-option-desc { font-size: 12px; color: #9A8768; font-style: italic; margin-top: 4px; }
+    .alt-option-name { font-size: 15px; font-weight: bold; color: #2A1414; }
+    .alt-option-desc { font-size: 13px; color: #5C4A2E; margin-top: 4px; line-height: 1.4; }
 
     .time-slots { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
     .time-slot {
-        padding: 10px 18px; border: 1px solid #D8C9AC; border-radius: 4px;
-        font-size: 14px; color: #3A1F1F; cursor: pointer; background: transparent;
+        padding: 11px 18px; border: 1.5px solid #C9B896; border-radius: 4px;
+        font-size: 15px; font-weight: 500; color: #2A1414; cursor: pointer; background: #FFFFFF;
         transition: all 0.15s ease;
     }
     .time-slot:hover { border-color: #7A1F2B; }
-    .time-slot.selected { background: #7A1F2B; color: #F5EFE3; border-color: #7A1F2B; }
+    .time-slot.selected { background: #7A1F2B; color: #FFFFFF; border-color: #7A1F2B; font-weight: bold; }
 
-    .plan-note-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #B08D57; margin-bottom: 10px; }
+    .plan-note-label { font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; color: #7A5A2E; margin-bottom: 10px; }
     .plan-note-input {
-        width: 100%; border: none; border-bottom: 1px solid #D8C9AC;
+        width: 100%; border: none; border-bottom: 1.5px solid #C9B896;
         background: transparent; text-align: center; font-family: 'Georgia', serif;
-        font-style: italic; font-size: 15px; color: #3A1F1F; padding: 8px 0 12px;
+        font-style: italic; font-size: 16px; color: #2A1414; padding: 8px 0 12px;
         margin-bottom: 26px; outline: none;
     }
-    .plan-note-input::placeholder { color: #C4B090; }
+    .plan-note-input::placeholder { color: #9C8B6F; }
 
     .btn-confirm {
-        width: 100%; padding: 16px; background: #B08D9A; color: #F5EFE3;
-        border: none; border-radius: 4px; font-size: 14px; letter-spacing: 1px;
+        width: 100%; padding: 16px; background: #C9A0AA; color: #FFFFFF;
+        border: none; border-radius: 4px; font-size: 15px; font-weight: bold; letter-spacing: 1px;
         text-transform: uppercase; cursor: pointer; transition: background 0.2s;
     }
     .btn-confirm.ready { background: #7A1F2B; }
@@ -192,7 +208,7 @@
     #stageSuccess { display: none; }
     #stageSuccess.active { display: flex; }
     .success-title { font-size: 26px; font-style: italic; color: #7A1F2B; margin-bottom: 10px; }
-    .success-text { font-size: 14px; color: #8A7050; text-align: center; max-width: 400px; }
+    .success-text { font-size: 15px; color: #5C4A2E; text-align: center; max-width: 400px; line-height: 1.5; }
 </style>
 </head>
 <body>
@@ -214,6 +230,7 @@
     <div class="stage" id="stageInvite">
         <div class="invite-card">
             <div class="invite-to">Pour toi, <span id="recipientName">toi</span></div>
+            <div class="invite-message" id="creatorMessage"></div>
             <div class="invite-question">Ça te dit un date<br>avec moi ?</div>
             <div class="invite-subtext">(dire non ne sert à rien, mais tu peux essayer)</div>
             <div class="invite-buttons" id="buttonZone">
@@ -236,13 +253,7 @@
                 <div id="altOptionsList"></div>
             </div>
 
-            <div class="time-slots" id="timeSlots">
-                <button class="time-slot" data-time="11:00">11:00</button>
-                <button class="time-slot" data-time="13:00">13:00</button>
-                <button class="time-slot" data-time="17:00">17:00</button>
-                <button class="time-slot" data-time="19:00">19:00</button>
-                <button class="time-slot" data-time="21:00">21:00</button>
-            </div>
+            <div class="time-slots" id="timeSlots"></div>
 
             <div class="plan-note-label">Un mot pour moi (facultatif)</div>
             <input type="text" class="plan-note-input" id="noteInput" placeholder="...">
@@ -275,11 +286,13 @@ let inviteData = {
     selected_option: null,
     selected_time: null,
     note: '',
+    creator_message: urlParams.get('msg') || '',
+    creator_email: urlParams.get('creator_email') || '',
     timestamp: null,
 };
 
 // ============================================================
-// LECTURE DES PARAMETRES D'OPTIONS (venant de creer.html)
+// LECTURE DES PARAMETRES (venant de creer.html)
 // ============================================================
 function parseAltOptions() {
     const altNames = (urlParams.get('alt') || '').split(',').filter(Boolean);
@@ -295,6 +308,12 @@ function parseAltOptions() {
         name: name,
         desc: altDescMap[name] || ''
     }));
+}
+
+function parseTimes() {
+    const timesRaw = urlParams.get('times') || '';
+    const times = timesRaw.split(',').filter(Boolean);
+    return times.length > 0 ? times : ['11:00', '13:00', '17:00', '19:00', '21:00'];
 }
 
 function initPlanContent() {
@@ -324,6 +343,29 @@ function initPlanContent() {
             card.onclick = () => selectAltOption(opt.name, card);
             list.appendChild(card);
         });
+    }
+
+    const times = parseTimes();
+    const timeContainer = document.getElementById('timeSlots');
+    timeContainer.innerHTML = '';
+    times.forEach(time => {
+        const btn = document.createElement('button');
+        btn.className = 'time-slot';
+        btn.dataset.time = time;
+        btn.textContent = time;
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedTime = time;
+            document.getElementById('btnConfirm').classList.add('ready');
+        });
+        timeContainer.appendChild(btn);
+    });
+
+    if (inviteData.creator_message) {
+        const msgBox = document.getElementById('creatorMessage');
+        msgBox.textContent = inviteData.creator_message;
+        msgBox.classList.add('active');
     }
 }
 
@@ -385,18 +427,6 @@ function goToPlan() {
 }
 
 // ============================================================
-// ETAPE 3 : selection du creneau horaire
-// ============================================================
-document.querySelectorAll('.time-slot').forEach(slot => {
-    slot.addEventListener('click', () => {
-        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-        slot.classList.add('selected');
-        selectedTime = slot.dataset.time;
-        document.getElementById('btnConfirm').classList.add('ready');
-    });
-});
-
-// ============================================================
 // ETAPE 3 -> 4 : confirmation finale (RECUPERATION DE LA REPONSE)
 // ============================================================
 function confirmPlan() {
@@ -422,7 +452,7 @@ function confirmPlan() {
 }
 
 function sendResponseToBackend(data) {
-    // OPTION A - Airtable webhook (bloqué par CORS, desactive)
+    // OPTION A - Airtable webhook (bloque par CORS, desactive)
     /*
     fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/TON_ID_ICI', {
         method: 'POST',
