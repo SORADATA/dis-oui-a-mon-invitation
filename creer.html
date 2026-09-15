@@ -681,7 +681,7 @@ function renderRecap() {
     document.getElementById('recapBox').innerHTML = html;
 }
 
-// Fonction asynchrone avec is.gd intégrée
+// Fonction asynchrone avec is.gd intégrée + Proxy CORS
 async function generateLink() {
     const confirmChecked = document.getElementById('confirmCheckbox').checked;
     const creatorEmail = document.getElementById('creatorEmailInput').value.trim();
@@ -697,7 +697,7 @@ async function generateLink() {
     errorDiv.style.display = 'none';
     
     // Feedback visuel de chargement
-    btnGenerate.textContent = "Génération...";
+    btnGenerate.textContent = "Génération du lien court...";
     btnGenerate.disabled = true;
 
     const recipient = document.getElementById('recipientInput').value.trim();
@@ -730,17 +730,21 @@ async function generateLink() {
     // Lien d'origine
     let finalUrl = BASE_URL + '?' + params.toString();
 
-    // Raccourcissement avec l'API is.gd
+    // Raccourcissement avec l'API is.gd + Proxy CORS (AllOrigins)
     try {
-        const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(finalUrl)}`);
+        const isgdUrl = `https://is.gd/create.php?format=json&url=${encodeURIComponent(finalUrl)}`;
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(isgdUrl)}`;
+        
+        const response = await fetch(proxyUrl);
         if (response.ok) {
             const data = await response.json();
-            if (data.shorturl) {
-                finalUrl = data.shorturl;
+            const parsedContents = JSON.parse(data.contents);
+            if (parsedContents.shorturl) {
+                finalUrl = parsedContents.shorturl;
             }
         }
     } catch (error) {
-        console.log("Impossible de raccourcir le lien, utilisation du lien long par défaut.");
+        console.log("Le raccourcisseur a échoué, utilisation du lien long.", error);
     }
 
     // Restauration du bouton
