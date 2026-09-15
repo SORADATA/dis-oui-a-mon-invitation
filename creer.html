@@ -74,7 +74,8 @@
         display: block;
     }
     .field-label:first-of-type { margin-top: 0; }
-    input[type="text"], input[type="email"] {
+    
+    input[type="text"], input[type="email"], input[type="time"] {
         width: 100%;
         padding: 14px 14px;
         border: 1.5px solid #C9B896;
@@ -85,7 +86,7 @@
         color: #2A1414;
         outline: none;
     }
-    input[type="text"]:focus, input[type="email"]:focus { border-color: #7A1F2B; }
+    input[type="text"]:focus, input[type="email"]:focus, input[type="time"]:focus { border-color: #7A1F2B; }
     input::placeholder { color: #9C8B6F; }
 
     textarea {
@@ -355,8 +356,19 @@
         line-height: 1.4;
     }
 
+    .error-msg {
+        color: #D8000C;
+        background-color: #FFD2D2;
+        padding: 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-bottom: 15px;
+        text-align: center;
+        display: none;
+    }
+
     .result-box {
-        margin-top: 10px;
+        margin-top: 24px;
         padding: 20px;
         background: #FFFFFF;
         border: 1.5px solid #C9B896;
@@ -400,6 +412,7 @@
         text-align: center;
         text-decoration: none;
         display: block;
+        transition: background 0.2s, color 0.2s;
     }
     .btn-copy { background: #FFFFFF; border: 1.5px solid #C9B896; color: #5C4A2E; }
     .btn-send { background: #25D366; color: white; }
@@ -417,6 +430,8 @@
             <h1>Configure ton invitation</h1>
             <div class="subtitle">Choisis une option principale, ajoute des alternatives.</div>
 
+            <div id="errorStep1" class="error-msg"></div>
+
             <label class="field-label">Prénom du/de la destinataire</label>
             <input type="text" id="recipientInput" placeholder="Ex : Camille">
 
@@ -431,7 +446,7 @@
                 <input type="text" id="newOptionInput" placeholder="Ajouter une option personnalisée...">
                 <button class="btn-add" onclick="addCustomOption()">+ Ajouter</button>
             </div>
-            <div class="legend">Clique une fois = option principale (★ obligatoire). Reclique = alternative. Re-reclique = désélectionner.</div>
+            <div class="legend">Le 1er choix est ton option principale (★). Les clics suivants ajoutent des alternatives !</div>
 
             <div class="descriptions-panel" id="descriptionsPanel">
                 <label class="field-label" style="margin-top:0;">Décris chaque option choisie (facultatif)</label>
@@ -440,6 +455,11 @@
 
             <label class="field-label">Créneaux horaires proposés</label>
             <div class="time-chip-grid" id="timeChipGrid"></div>
+            
+            <div class="add-option-row">
+                <input type="time" id="newTimeInput">
+                <button class="btn-add" onclick="addCustomTime()">+ Ajouter une heure</button>
+            </div>
             <div class="field-hint">Sélectionne les créneaux que tu veux proposer.</div>
 
             <div class="btn-nav-row">
@@ -453,14 +473,16 @@
             <h1>Le mot de la fin</h1>
             <div class="subtitle">Vérifie tout, ajoute ton mot, puis génère le lien.</div>
 
+            <div id="errorStep2" class="error-msg"></div>
+
             <div class="recap-box" id="recapBox"></div>
 
             <label class="field-label">Ton petit mot sur la carte</label>
             <textarea id="finalNoteInput" rows="4" placeholder="Écris un petit mot qui accompagnera ton invitation..."></textarea>
 
-            <label class="field-label">Ton email</label>
-            <input type="email" id="creatorEmailInput" placeholder="toi@example.com">
-            <div class="field-hint">Pour être prévenu·e dès que la personne répond.</div>
+            <label class="field-label">Ton email <span class="required-tag">Indispensable !</span></label>
+            <input type="email" id="creatorEmailInput" placeholder="toi@example.com" required>
+            <div class="field-hint">Pour être prévenu·e dès que la personne répondra à ton invitation.</div>
 
             <div class="checkbox-row">
                 <input type="checkbox" id="confirmCheckbox">
@@ -496,13 +518,13 @@ const defaultOptions = [
     "Plage", "Randonnée", "Aquarium", "Patinoire", "Concert",
     "Brunch", "Vélo", "Kayak", "Accrobranche", "Marché nocturne"
 ];
-const defaultTimes = ["11:00", "13:00", "17:00", "19:00", "21:00"];
+let defaultTimes = ["11:00", "13:00", "17:00", "19:00", "21:00"];
 
 let allOptions = [...defaultOptions];
 let mainOption = null;
 let altOptions = new Set();
 let descriptions = {};
-let selectedTimes = new Set(defaultTimes);
+let selectedTimes = new Set(["11:00", "13:00", "17:00", "19:00", "21:00"]);
 
 function renderOptions() {
     const grid = document.getElementById('optionsGrid');
@@ -522,13 +544,15 @@ function renderOptions() {
 
 function cycleOption(opt) {
     if (mainOption === opt) {
+        // Déselection de l'option principale
         mainOption = null;
-        altOptions.add(opt);
     } else if (altOptions.has(opt)) {
+        // Déselection d'une option alternative
         altOptions.delete(opt);
         delete descriptions[opt];
     } else {
-        if (mainOption === null) {
+        // Nouvelle sélection : principale si vide, sinon alternative
+        if (!mainOption) {
             mainOption = opt;
         } else {
             altOptions.add(opt);
@@ -583,6 +607,7 @@ function addCustomOption() {
         renderOptions();
     }
 }
+
 document.getElementById('newOptionInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addCustomOption();
 });
@@ -590,6 +615,10 @@ document.getElementById('newOptionInput').addEventListener('keypress', (e) => {
 function renderTimeChips() {
     const grid = document.getElementById('timeChipGrid');
     grid.innerHTML = '';
+    
+    // Trier les horaires pour que l'ajout personnalisé s'intègre proprement
+    defaultTimes.sort(); 
+    
     defaultTimes.forEach(time => {
         const chip = document.createElement('div');
         chip.className = 'time-chip' + (selectedTimes.has(time) ? ' selected' : '');
@@ -603,21 +632,32 @@ function renderTimeChips() {
     });
 }
 
+function addCustomTime() {
+    const input = document.getElementById('newTimeInput');
+    const value = input.value;
+    if (value) {
+        selectedTimes.add(value);
+        if (!defaultTimes.includes(value)) {
+            defaultTimes.push(value);
+        }
+        renderTimeChips();
+        input.value = '';
+    }
+}
+
 function goToStep2() {
     const recipient = document.getElementById('recipientInput').value.trim();
-    if (!recipient) {
-        alert('Ajoute le prénom du/de la destinataire 😊');
+    const errorDiv = document.getElementById('errorStep1');
+    
+    // Remplacement des alerts par des validations inline
+    if (!recipient || !mainOption || selectedTimes.size === 0) {
+        errorDiv.textContent = 'Oops ! Ajoute le prénom, au moins 1 option de sortie (★) et 1 créneau pour continuer.';
+        errorDiv.style.display = 'block';
+        window.scrollTo(0, 0);
         return;
     }
-    if (!mainOption) {
-        alert('Choisis une option obligatoire (clique une fois sur une option pour la rendre principale ★)');
-        return;
-    }
-    if (selectedTimes.size === 0) {
-        alert('Sélectionne au moins un créneau horaire');
-        return;
-    }
-
+    
+    errorDiv.style.display = 'none';
     renderRecap();
     document.getElementById('step1').classList.remove('active');
     document.getElementById('step2').classList.add('active');
@@ -647,14 +687,19 @@ function renderRecap() {
 
 function generateLink() {
     const confirmChecked = document.getElementById('confirmCheckbox').checked;
-    if (!confirmChecked) {
-        alert('Coche la case de confirmation pour générer le lien 😊');
+    const creatorEmail = document.getElementById('creatorEmailInput').value.trim();
+    const errorDiv = document.getElementById('errorStep2');
+
+    if (!creatorEmail || !confirmChecked) {
+        errorDiv.textContent = !creatorEmail ? 'Ajoute ton email pour pouvoir recevoir sa réponse !' : 'Coche la case de confirmation pour générer le lien.';
+        errorDiv.style.display = 'block';
         return;
     }
+    
+    errorDiv.style.display = 'none';
 
     const recipient = document.getElementById('recipientInput').value.trim();
     const note = document.getElementById('finalNoteInput').value.trim();
-    const creatorEmail = document.getElementById('creatorEmailInput').value.trim();
 
     const inviteId = 'inv' + Date.now().toString(36);
     const params = new URLSearchParams();
@@ -664,7 +709,7 @@ function generateLink() {
 
     if (descriptions[mainOption]) params.set('main_desc', descriptions[mainOption]);
     if (note) params.set('msg', note);
-    if (creatorEmail) params.set('creator_email', creatorEmail);
+    params.set('creator_email', creatorEmail);
 
     if (selectedTimes.size > 0) {
         params.set('times', Array.from(selectedTimes).sort().join(','));
@@ -694,7 +739,21 @@ function generateLink() {
 function copyLink() {
     if (window._lastGeneratedUrl) {
         navigator.clipboard.writeText(window._lastGeneratedUrl);
-        alert('Lien copié ✓');
+        
+        // Changement de couleur et de texte temporaire pour le feedback visuel
+        const copyBtn = document.querySelector('.btn-copy');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = 'Lien copié ✓';
+        copyBtn.style.background = '#E8F5E9'; // Vert très clair
+        copyBtn.style.borderColor = '#4CAF50';
+        copyBtn.style.color = '#2E7D32';
+        
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.style.background = '#FFFFFF';
+            copyBtn.style.borderColor = '#C9B896';
+            copyBtn.style.color = '#5C4A2E';
+        }, 2000);
     }
 }
 

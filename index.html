@@ -129,9 +129,9 @@
     .invite-subtext { font-size: 14px; color: #5C4A2E; font-style: italic; margin-bottom: 36px; }
     .invite-buttons { display: flex; gap: 20px; justify-content: center; position: relative; height: 60px; }
     .btn { padding: 14px 32px; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: transform 0.15s ease; letter-spacing: 0.5px; border: none; }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-yes { background: #7A1F2B; color: #FFFFFF; }
-    .btn-no { background: #FFFFFF; color: #5C4A2E; border: 1.5px solid #C9B896; position: absolute; transition: transform 0.25s ease-out; }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); }
+    .btn-yes { background: #7A1F2B; color: #FFFFFF; z-index: 2; }
+    .btn-no { background: #FFFFFF; color: #5C4A2E; border: 1.5px solid #C9B896; position: absolute; transition: transform 0.25s ease-out, top 0.2s, left 0.2s; z-index: 1;}
 
     /* ============ ETAPE 3 : PLAN + CONFIRMATION ============ */
     #stagePlan { display: none; }
@@ -151,6 +151,17 @@
     .plan-title { font-size: 28px; font-style: italic; color: #7A1F2B; margin-bottom: 18px; }
     .plan-mission { font-size: 17px; font-weight: bold; color: #2A1414; margin-bottom: 6px; }
     .plan-meta { font-size: 14px; color: #5C4A2E; margin-bottom: 20px; line-height: 1.5; }
+
+    .error-msg {
+        color: #D8000C;
+        background-color: #FFD2D2;
+        padding: 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        text-align: center;
+        display: none;
+    }
 
     /* ============ OPTIONS ALTERNATIVES ============ */
     .alt-options-panel {
@@ -199,10 +210,11 @@
     .btn-confirm {
         width: 100%; padding: 16px; background: #C9A0AA; color: #FFFFFF;
         border: none; border-radius: 4px; font-size: 15px; font-weight: bold; letter-spacing: 1px;
-        text-transform: uppercase; cursor: pointer; transition: background 0.2s;
+        text-transform: uppercase; cursor: pointer; transition: background 0.2s, opacity 0.2s;
     }
     .btn-confirm.ready { background: #7A1F2B; }
-    .btn-confirm:hover.ready { background: #5E1620; }
+    .btn-confirm:hover.ready:not(:disabled) { background: #5E1620; }
+    .btn-confirm:disabled { cursor: not-allowed; opacity: 0.7; }
 
     /* ============ ETAPE 4 : SUCCES ============ */
     #stageSuccess { display: none; }
@@ -252,6 +264,8 @@
                 <div class="alt-options-label">Ou si tu préfères...</div>
                 <div id="altOptionsList"></div>
             </div>
+
+            <div id="errorPlan" class="error-msg"></div>
 
             <div class="time-slots" id="timeSlots"></div>
 
@@ -358,6 +372,7 @@ function initPlanContent() {
             btn.classList.add('selected');
             selectedTime = time;
             document.getElementById('btnConfirm').classList.add('ready');
+            document.getElementById('errorPlan').style.display = 'none'; // Cache l'erreur si on clique sur un créneau
         });
         timeContainer.appendChild(btn);
     });
@@ -393,9 +408,11 @@ const buttonZone = document.getElementById('buttonZone');
 function moveButtonAway() {
     const zoneRect = buttonZone.getBoundingClientRect();
     const btnRect = btnNo.getBoundingClientRect();
-    const maxX = zoneRect.width - btnRect.width;
+    
+    // Limitation pour que le bouton ne sorte pas trop loin sur mobile
+    const maxX = Math.min(zoneRect.width - btnRect.width, 150); 
     const randomX = Math.random() * maxX - (maxX / 2);
-    const randomY = (Math.random() - 0.5) * 40;
+    const randomY = (Math.random() - 0.5) * 80;
 
     btnNo.style.left = `calc(50% + ${randomX}px)`;
     btnNo.style.top = `${randomY}px`;
@@ -413,6 +430,8 @@ btnNo.addEventListener('touchstart', (e) => {
     e.preventDefault();
     dodgeCount += 1;
     moveButtonAway();
+    if (dodgeCount === 3) btnNo.textContent = "Non (sérieusement ?)";
+    else if (dodgeCount === 6) btnNo.textContent = "Non !!";
 });
 
 // ============================================================
@@ -429,11 +448,21 @@ function goToPlan() {
 // ============================================================
 // ETAPE 3 -> 4 : confirmation finale (RECUPERATION DE LA REPONSE)
 // ============================================================
-function confirmPlan() {
+async function confirmPlan() {
+    const errorDiv = document.getElementById('errorPlan');
+    const btnConfirm = document.getElementById('btnConfirm');
+
     if (!selectedTime) {
-        alert('Choisis un créneau avant de confirmer 😊');
+        errorDiv.textContent = 'Oops ! Sélectionne un créneau horaire avant de valider 😊';
+        errorDiv.style.display = 'block';
         return;
     }
+    
+    errorDiv.style.display = 'none';
+    
+    // Feedback visuel + Blocage anti-spam
+    btnConfirm.textContent = 'Envoi en cours...';
+    btnConfirm.disabled = true;
 
     inviteData.selected_time = selectedTime;
     inviteData.selected_option = selectedOption;
@@ -441,7 +470,9 @@ function confirmPlan() {
     inviteData.timestamp = new Date().toISOString();
 
     localStorage.setItem('dis_oui_response_' + inviteData.invite_id, JSON.stringify(inviteData));
-    sendResponseToBackend(inviteData);
+    
+    // Attente de l'envoi de la requête avant de passer à l'écran de succès
+    await sendResponseToBackend(inviteData);
 
     console.log('Réponse finale capturée :', inviteData);
 
@@ -452,20 +483,9 @@ function confirmPlan() {
 }
 
 // ============================================================
-// ENVOI DE LA REPONSE : directement chez le créateur·rice de
-// l'invitation (via son email), pas chez le propriétaire de l'app.
-//
-// On utilise FormSubmit.co en mode AJAX : on poste vers
-// https://formsubmit.co/ajax/{email_du_createur} et FormSubmit
-// envoie l'email à CETTE adresse, dynamiquement.
-//
-// Attention : la toute première fois qu'une adresse reçoit un
-// envoi via FormSubmit, elle doit cliquer sur un lien de
-// confirmation reçu par email. Ensuite c'est automatique.
+// ENVOI DE LA REPONSE
 // ============================================================
-function sendResponseToBackend(data) {
-    // Payload avec des labels lisibles, communs aux deux services d'envoi.
-    // "_subject" et "_template" sont reconnus par FormSubmit ET Formspree.
+async function sendResponseToBackend(data) {
     const payload = {
         _subject: `💌 ${data.recipient} a répondu "${data.choice === 'oui' ? 'oui' : 'non'}" à ton invitation !`,
         _template: 'table',
@@ -482,22 +502,23 @@ function sendResponseToBackend(data) {
         'Référence invitation': data.invite_id
     };
 
-    if (data.creator_email) {
-        // Envoi dynamique vers l'email du créateur de l'invitation
-        const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(data.creator_email)}`;
-        fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(err => console.error('Erreur envoi email au créateur :', err));
-    } else {
-        // Filet de sécurité si aucun email n'a été renseigné à la création :
-        // la réponse part sur le Formspree par défaut pour ne rien perdre.
-        fetch('https://formspree.io/f/xpwyakdv', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify(payload)
-        }).catch(err => console.error('Erreur envoi email (fallback) :', err));
+    try {
+        if (data.creator_email) {
+            const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(data.creator_email)}`;
+            await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        } else {
+            await fetch('https://formspree.io/f/xpwyakdv', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+        }
+    } catch(err) {
+        console.error('Erreur lors de l\'envoi de la réponse :', err);
     }
 }
 
