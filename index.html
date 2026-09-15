@@ -451,22 +451,54 @@ function confirmPlan() {
         `${selectedOption} à ${selectedTime}. Il/elle va recevoir ta réponse tout de suite.`;
 }
 
+// ============================================================
+// ENVOI DE LA REPONSE : directement chez le créateur·rice de
+// l'invitation (via son email), pas chez le propriétaire de l'app.
+//
+// On utilise FormSubmit.co en mode AJAX : on poste vers
+// https://formsubmit.co/ajax/{email_du_createur} et FormSubmit
+// envoie l'email à CETTE adresse, dynamiquement.
+//
+// Attention : la toute première fois qu'une adresse reçoit un
+// envoi via FormSubmit, elle doit cliquer sur un lien de
+// confirmation reçu par email. Ensuite c'est automatique.
+// ============================================================
 function sendResponseToBackend(data) {
-    // OPTION A - Airtable webhook (bloque par CORS, desactive)
-    /*
-    fetch('https://hooks.airtable.com/workflows/v1/genericWebhook/TON_ID_ICI', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    });
-    */
+    // Payload avec des labels lisibles, communs aux deux services d'envoi.
+    // "_subject" et "_template" sont reconnus par FormSubmit ET Formspree.
+    const payload = {
+        _subject: `💌 ${data.recipient} a répondu "${data.choice === 'oui' ? 'oui' : 'non'}" à ton invitation !`,
+        _template: 'table',
+        'Destinataire': data.recipient,
+        'A répondu': data.choice === 'oui' ? 'Oui 🎉' : 'Non',
+        'Option choisie': data.selected_option,
+        'Créneau choisi': data.selected_time,
+        'Petit mot laissé': data.note || '(aucun mot)',
+        "Nb. de fois où il/elle a esquivé le bouton Non": data.dodge_attempts,
+        'Répondu le': new Date(data.timestamp).toLocaleString('fr-FR', {
+            dateStyle: 'long',
+            timeStyle: 'short'
+        }),
+        'Référence invitation': data.invite_id
+    };
 
-    // OPTION B - Formspree (actif)
-    fetch('https://formspree.io/f/xpwyakdv', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-        body: JSON.stringify(data)
-    });
+    if (data.creator_email) {
+        // Envoi dynamique vers l'email du créateur de l'invitation
+        const endpoint = `https://formsubmit.co/ajax/${encodeURIComponent(data.creator_email)}`;
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(err => console.error('Erreur envoi email au créateur :', err));
+    } else {
+        // Filet de sécurité si aucun email n'a été renseigné à la création :
+        // la réponse part sur le Formspree par défaut pour ne rien perdre.
+        fetch('https://formspree.io/f/xpwyakdv', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(err => console.error('Erreur envoi email (fallback) :', err));
+    }
 }
 
 // ============================================================
