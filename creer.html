@@ -288,10 +288,11 @@
         letter-spacing: 1px;
         text-transform: uppercase;
         cursor: pointer;
-        transition: background 0.2s;
+        transition: background 0.2s, opacity 0.2s;
     }
     .btn-generate { background: #7A1F2B; color: #FFFFFF; }
-    .btn-generate:hover { background: #5E1620; }
+    .btn-generate:hover:not(:disabled) { background: #5E1620; }
+    .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; }
     .btn-back { background: #FFFFFF; border: 1.5px solid #C9B896; color: #5C4A2E; }
 
     .step { display: none; }
@@ -544,14 +545,11 @@ function renderOptions() {
 
 function cycleOption(opt) {
     if (mainOption === opt) {
-        // Déselection de l'option principale
         mainOption = null;
     } else if (altOptions.has(opt)) {
-        // Déselection d'une option alternative
         altOptions.delete(opt);
         delete descriptions[opt];
     } else {
-        // Nouvelle sélection : principale si vide, sinon alternative
         if (!mainOption) {
             mainOption = opt;
         } else {
@@ -616,7 +614,6 @@ function renderTimeChips() {
     const grid = document.getElementById('timeChipGrid');
     grid.innerHTML = '';
     
-    // Trier les horaires pour que l'ajout personnalisé s'intègre proprement
     defaultTimes.sort(); 
     
     defaultTimes.forEach(time => {
@@ -649,7 +646,6 @@ function goToStep2() {
     const recipient = document.getElementById('recipientInput').value.trim();
     const errorDiv = document.getElementById('errorStep1');
     
-    // Remplacement des alerts par des validations inline
     if (!recipient || !mainOption || selectedTimes.size === 0) {
         errorDiv.textContent = 'Oops ! Ajoute le prénom, au moins 1 option de sortie (★) et 1 créneau pour continuer.';
         errorDiv.style.display = 'block';
@@ -685,10 +681,12 @@ function renderRecap() {
     document.getElementById('recapBox').innerHTML = html;
 }
 
-function generateLink() {
+// Fonction asynchrone avec is.gd intégrée
+async function generateLink() {
     const confirmChecked = document.getElementById('confirmCheckbox').checked;
     const creatorEmail = document.getElementById('creatorEmailInput').value.trim();
     const errorDiv = document.getElementById('errorStep2');
+    const btnGenerate = document.getElementById('btnGenerateFinal');
 
     if (!creatorEmail || !confirmChecked) {
         errorDiv.textContent = !creatorEmail ? 'Ajoute ton email pour pouvoir recevoir sa réponse !' : 'Coche la case de confirmation pour générer le lien.';
@@ -697,6 +695,10 @@ function generateLink() {
     }
     
     errorDiv.style.display = 'none';
+    
+    // Feedback visuel de chargement
+    btnGenerate.textContent = "Génération...";
+    btnGenerate.disabled = true;
 
     const recipient = document.getElementById('recipientInput').value.trim();
     const note = document.getElementById('finalNoteInput').value.trim();
@@ -725,8 +727,27 @@ function generateLink() {
         }
     }
 
-    const finalUrl = BASE_URL + '?' + params.toString();
+    // Lien d'origine
+    let finalUrl = BASE_URL + '?' + params.toString();
 
+    // Raccourcissement avec l'API is.gd
+    try {
+        const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(finalUrl)}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.shorturl) {
+                finalUrl = data.shorturl;
+            }
+        }
+    } catch (error) {
+        console.log("Impossible de raccourcir le lien, utilisation du lien long par défaut.");
+    }
+
+    // Restauration du bouton
+    btnGenerate.textContent = "Générer le lien";
+    btnGenerate.disabled = false;
+
+    // Affichage
     document.getElementById('resultUrl').textContent = finalUrl;
     document.getElementById('resultBox').style.display = 'block';
 
@@ -740,11 +761,10 @@ function copyLink() {
     if (window._lastGeneratedUrl) {
         navigator.clipboard.writeText(window._lastGeneratedUrl);
         
-        // Changement de couleur et de texte temporaire pour le feedback visuel
         const copyBtn = document.querySelector('.btn-copy');
         const originalText = copyBtn.textContent;
         copyBtn.textContent = 'Lien copié ✓';
-        copyBtn.style.background = '#E8F5E9'; // Vert très clair
+        copyBtn.style.background = '#E8F5E9'; 
         copyBtn.style.borderColor = '#4CAF50';
         copyBtn.style.color = '#2E7D32';
         
