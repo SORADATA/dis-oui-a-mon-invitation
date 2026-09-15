@@ -15,405 +15,136 @@
         font-size: 16px;
     }
     .top-banner {
-        background: #7A1F2B;
-        color: #FFFFFF;
-        text-align: center;
-        padding: 14px;
-        font-size: 13px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        position: fixed;
-        top: 0; left: 0; right: 0;
-        z-index: 10;
+        background: #7A1F2B; color: #FFFFFF; text-align: center; padding: 14px;
+        font-size: 13px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;
+        position: fixed; top: 0; left: 0; right: 0; z-index: 10;
     }
     .container {
-        max-width: 640px;
-        margin: 70px auto 0;
-        background: #FFFDF9;
-        border: 1px solid #C9B896;
-        border-radius: 6px;
-        padding: 28px 24px;
+        max-width: 640px; margin: 70px auto 0; background: #FFFDF9;
+        border: 1px solid #C9B896; border-radius: 6px; padding: 28px 24px;
         box-shadow: 0 20px 60px rgba(58,31,31,0.12);
     }
-    @media (min-width: 500px) {
-        .container { padding: 40px; }
-    }
+    @media (min-width: 500px) { .container { padding: 40px; } }
     .step-label {
-        font-size: 12px;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: #8A6B3F;
-        text-align: center;
-        margin-bottom: 20px;
-        font-weight: bold;
+        font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+        color: #8A6B3F; text-align: center; margin-bottom: 20px; font-weight: bold;
     }
-    h1 {
-        font-size: 24px;
-        font-style: italic;
-        color: #7A1F2B;
-        margin-bottom: 8px;
-        text-align: center;
-        line-height: 1.3;
-    }
-    .subtitle {
-        text-align: center;
-        font-size: 14px;
-        color: #5C4A2E;
-        margin-bottom: 30px;
-        line-height: 1.5;
-    }
+    h1 { font-size: 24px; font-style: italic; color: #7A1F2B; margin-bottom: 8px; text-align: center; line-height: 1.3; }
+    .subtitle { text-align: center; font-size: 14px; color: #5C4A2E; margin-bottom: 30px; line-height: 1.5; }
     .field-label {
-        font-size: 13px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #7A5A2E;
-        margin-bottom: 10px;
-        margin-top: 24px;
-        display: block;
+        font-size: 13px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase;
+        color: #7A5A2E; margin-bottom: 10px; margin-top: 24px; display: block;
     }
     .field-label:first-of-type { margin-top: 0; }
-    
     input[type="text"], input[type="email"], input[type="time"] {
-        width: 100%;
-        padding: 14px 14px;
-        border: 1.5px solid #C9B896;
-        border-radius: 4px;
-        background: #FFFFFF;
-        font-family: 'Georgia', serif;
-        font-size: 16px;
-        color: #2A1414;
-        outline: none;
+        width: 100%; padding: 14px 14px; border: 1.5px solid #C9B896; border-radius: 4px;
+        background: #FFFFFF; font-family: 'Georgia', serif; font-size: 16px; color: #2A1414; outline: none;
     }
     input[type="text"]:focus, input[type="email"]:focus, input[type="time"]:focus { border-color: #7A1F2B; }
     input::placeholder { color: #9C8B6F; }
-
     textarea {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1.5px solid #C9B896;
-        border-radius: 4px;
-        background: #FFFFFF;
-        font-family: 'Georgia', serif;
-        font-size: 15px;
-        color: #2A1414;
-        outline: none;
-        resize: vertical;
-        min-height: 52px;
-        line-height: 1.5;
+        width: 100%; padding: 12px 14px; border: 1.5px solid #C9B896; border-radius: 4px;
+        background: #FFFFFF; font-family: 'Georgia', serif; font-size: 15px; color: #2A1414;
+        outline: none; resize: vertical; min-height: 52px; line-height: 1.5;
     }
     textarea:focus { border-color: #7A1F2B; }
     textarea::placeholder { color: #9C8B6F; font-style: italic; }
-
     .required-tag {
-        display: inline-block;
-        background: #7A1F2B;
-        color: #FFFFFF;
-        font-size: 10px;
-        font-weight: bold;
-        padding: 3px 9px;
-        border-radius: 10px;
-        margin-left: 8px;
-        letter-spacing: 0.5px;
-        vertical-align: middle;
+        display: inline-block; background: #7A1F2B; color: #FFFFFF; font-size: 10px; font-weight: bold;
+        padding: 3px 9px; border-radius: 10px; margin-left: 8px; letter-spacing: 0.5px; vertical-align: middle;
     }
     .optional-tag {
-        display: inline-block;
-        background: transparent;
-        color: #7A5A2E;
-        border: 1.5px solid #C9B896;
-        font-size: 10px;
-        font-weight: bold;
-        padding: 3px 9px;
-        border-radius: 10px;
-        margin-left: 8px;
-        letter-spacing: 0.5px;
-        vertical-align: middle;
+        display: inline-block; background: transparent; color: #7A5A2E; border: 1.5px solid #C9B896;
+        font-size: 10px; font-weight: bold; padding: 3px 9px; border-radius: 10px; margin-left: 8px;
+        letter-spacing: 0.5px; vertical-align: middle;
     }
-
-    .options-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-    }
+    .options-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .option-chip {
-        padding: 11px 16px;
-        border: 1.5px solid #C9B896;
-        border-radius: 20px;
-        background: #FFFFFF;
-        font-size: 14px;
-        font-weight: 500;
-        color: #2A1414;
-        cursor: pointer;
-        transition: all 0.15s ease;
-        user-select: none;
+        padding: 11px 16px; border: 1.5px solid #C9B896; border-radius: 20px; background: #FFFFFF;
+        font-size: 14px; font-weight: 500; color: #2A1414; cursor: pointer; transition: all 0.15s ease; user-select: none;
     }
     .option-chip:hover { border-color: #7A1F2B; }
-    .option-chip.selected-main {
-        background: #7A1F2B;
-        color: #FFFFFF;
-        border-color: #7A1F2B;
-        font-weight: bold;
-    }
-    .option-chip.selected-alt {
-        background: #D9A8B4;
-        color: #4A0F17;
-        border-color: #7A1F2B;
-        font-weight: bold;
-    }
+    .option-chip.selected-main { background: #7A1F2B; color: #FFFFFF; border-color: #7A1F2B; font-weight: bold; }
+    .option-chip.selected-alt { background: #D9A8B4; color: #4A0F17; border-color: #7A1F2B; font-weight: bold; }
     .option-chip .chip-star { margin-right: 4px; }
-
-    .add-option-row {
-        display: flex;
-        gap: 8px;
-        margin-top: 14px;
-    }
+    .add-option-row { display: flex; gap: 8px; margin-top: 14px; }
     .add-option-row input {
-        flex: 1;
-        padding: 12px 12px;
-        border: 1.5px dashed #C9B896;
-        border-radius: 4px;
-        background: transparent;
-        font-family: 'Georgia', serif;
-        font-size: 14px;
-        outline: none;
+        flex: 1; padding: 12px 12px; border: 1.5px dashed #C9B896; border-radius: 4px;
+        background: transparent; font-family: 'Georgia', serif; font-size: 14px; outline: none;
     }
     .btn-add {
-        padding: 10px 18px;
-        background: #7A5A2E;
-        border: none;
-        color: #FFFFFF;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        white-space: nowrap;
+        padding: 10px 18px; background: #7A5A2E; border: none; color: #FFFFFF; border-radius: 4px;
+        font-size: 14px; font-weight: bold; cursor: pointer; white-space: nowrap;
     }
     .btn-add:hover { background: #5C441F; }
-
-    .legend {
-        font-size: 13px;
-        color: #5C4A2E;
-        margin-top: 12px;
-        line-height: 1.5;
-    }
-
-    .descriptions-panel {
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1.5px dashed #C9B896;
-    }
-    .description-item {
-        margin-bottom: 16px;
-        padding: 14px;
-        background: #FFFFFF;
-        border: 1.5px solid #DDD0B5;
-        border-radius: 6px;
-    }
-    .description-item-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-    }
-    .description-item-name {
-        font-size: 15px;
-        font-weight: bold;
-        color: #2A1414;
-    }
+    .legend { font-size: 13px; color: #5C4A2E; margin-top: 12px; line-height: 1.5; }
+    .descriptions-panel { margin-top: 24px; padding-top: 20px; border-top: 1.5px dashed #C9B896; }
+    .description-item { margin-bottom: 16px; padding: 14px; background: #FFFFFF; border: 1.5px solid #DDD0B5; border-radius: 6px; }
+    .description-item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+    .description-item-name { font-size: 15px; font-weight: bold; color: #2A1414; }
     .description-badge-main {
-        font-size: 10px;
-        font-weight: bold;
-        background: #7A1F2B;
-        color: #FFFFFF;
-        padding: 3px 9px;
-        border-radius: 10px;
-        letter-spacing: 0.5px;
+        font-size: 10px; font-weight: bold; background: #7A1F2B; color: #FFFFFF;
+        padding: 3px 9px; border-radius: 10px; letter-spacing: 0.5px;
     }
     .description-badge-alt {
-        font-size: 10px;
-        font-weight: bold;
-        border: 1.5px solid #7A1F2B;
-        color: #7A1F2B;
-        padding: 3px 9px;
-        border-radius: 10px;
-        letter-spacing: 0.5px;
+        font-size: 10px; font-weight: bold; border: 1.5px solid #7A1F2B; color: #7A1F2B;
+        padding: 3px 9px; border-radius: 10px; letter-spacing: 0.5px;
     }
     .no-selection-hint {
-        font-size: 13px;
-        color: #7A5A2E;
-        font-style: italic;
-        text-align: center;
-        padding: 14px;
-        background: #FFFFFF;
-        border: 1px dashed #C9B896;
-        border-radius: 6px;
+        font-size: 13px; color: #7A5A2E; font-style: italic; text-align: center;
+        padding: 14px; background: #FFFFFF; border: 1px dashed #C9B896; border-radius: 6px;
     }
-
-    .time-chip-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-    }
+    .time-chip-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
     .time-chip {
-        padding: 10px 18px;
-        border: 1.5px solid #C9B896;
-        border-radius: 20px;
-        background: #FFFFFF;
-        font-size: 14px;
-        font-weight: 500;
-        color: #2A1414;
-        cursor: pointer;
-        transition: all 0.15s ease;
+        padding: 10px 18px; border: 1.5px solid #C9B896; border-radius: 20px; background: #FFFFFF;
+        font-size: 14px; font-weight: 500; color: #2A1414; cursor: pointer; transition: all 0.15s ease;
     }
     .time-chip:hover { border-color: #7A1F2B; }
     .time-chip.selected { background: #7A1F2B; color: #FFFFFF; border-color: #7A1F2B; font-weight: bold; }
-
-    .btn-nav-row {
-        display: flex;
-        gap: 12px;
-        margin-top: 34px;
-    }
+    .btn-nav-row { display: flex; gap: 12px; margin-top: 34px; }
     .btn-generate, .btn-back {
-        flex: 1;
-        padding: 16px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: background 0.2s, opacity 0.2s;
+        flex: 1; padding: 16px; border: none; border-radius: 4px; font-size: 14px; font-weight: bold;
+        letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.2s, opacity 0.2s;
     }
     .btn-generate { background: #7A1F2B; color: #FFFFFF; }
     .btn-generate:hover:not(:disabled) { background: #5E1620; }
     .btn-generate:disabled { opacity: 0.7; cursor: not-allowed; }
     .btn-back { background: #FFFFFF; border: 1.5px solid #C9B896; color: #5C4A2E; }
-
     .step { display: none; }
     .step.active { display: block; }
-
-    .recap-box {
-        background: #FFFFFF;
-        border: 1.5px solid #C9B896;
-        border-radius: 6px;
-        padding: 18px;
-        margin-bottom: 24px;
-    }
-    .recap-line {
-        font-size: 15px;
-        color: #2A1414;
-        margin-bottom: 8px;
-        line-height: 1.5;
-    }
+    .recap-box { background: #FFFFFF; border: 1.5px solid #C9B896; border-radius: 6px; padding: 18px; margin-bottom: 24px; }
+    .recap-line { font-size: 15px; color: #2A1414; margin-bottom: 8px; line-height: 1.5; }
     .recap-line strong { color: #7A1F2B; }
-    .recap-alt {
-        font-size: 13px;
-        color: #5C4A2E;
-        margin-top: 6px;
-        line-height: 1.5;
-    }
-
+    .recap-alt { font-size: 13px; color: #5C4A2E; margin-top: 6px; line-height: 1.5; }
     .checkbox-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 12px;
-        background: #FFFFFF;
-        border: 1.5px solid #C9B896;
-        border-radius: 6px;
-        padding: 16px;
-        margin-top: 24px;
+        display: flex; align-items: flex-start; gap: 12px; background: #FFFFFF;
+        border: 1.5px solid #C9B896; border-radius: 6px; padding: 16px; margin-top: 24px;
     }
     .checkbox-row input[type="checkbox"] {
-        margin-top: 3px;
-        width: 20px;
-        height: 20px;
-        accent-color: #7A1F2B;
-        cursor: pointer;
-        flex-shrink: 0;
+        margin-top: 3px; width: 20px; height: 20px; accent-color: #7A1F2B; cursor: pointer; flex-shrink: 0;
     }
-    .checkbox-text {
-        font-size: 14px;
-        color: #2A1414;
-        line-height: 1.5;
-        font-weight: 500;
-    }
-    .checkbox-hint {
-        font-size: 12px;
-        color: #5C4A2E;
-        margin-top: 4px;
-        line-height: 1.4;
-    }
-
-    .field-hint {
-        font-size: 12px;
-        color: #5C4A2E;
-        margin-top: 8px;
-        line-height: 1.4;
-    }
-
+    .checkbox-text { font-size: 14px; color: #2A1414; line-height: 1.5; font-weight: 500; }
+    .checkbox-hint { font-size: 12px; color: #5C4A2E; margin-top: 4px; line-height: 1.4; }
+    .field-hint { font-size: 12px; color: #5C4A2E; margin-top: 8px; line-height: 1.4; }
     .error-msg {
-        color: #D8000C;
-        background-color: #FFD2D2;
-        padding: 12px;
-        border-radius: 4px;
-        font-size: 14px;
-        margin-bottom: 15px;
-        text-align: center;
-        display: none;
+        color: #D8000C; background-color: #FFD2D2; padding: 12px; border-radius: 4px;
+        font-size: 14px; margin-bottom: 15px; text-align: center; display: none;
     }
-
-    .result-box {
-        margin-top: 24px;
-        padding: 20px;
-        background: #FFFFFF;
-        border: 1.5px solid #C9B896;
-        border-radius: 6px;
+    .info-msg {
+        color: #5C4A2E; background-color: #F5EDD9; padding: 10px 12px; border-radius: 4px;
+        font-size: 13px; margin-bottom: 12px; text-align: center; display: none; border-left: 3px solid #B08D57;
     }
-    .result-label {
-        font-size: 12px;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        color: #7A5A2E;
-        margin-bottom: 10px;
-    }
+    .result-box { margin-top: 24px; padding: 20px; background: #FFFFFF; border: 1.5px solid #C9B896; border-radius: 6px; }
+    .result-label { font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; color: #7A5A2E; margin-bottom: 10px; }
     .result-url {
-        font-family: monospace;
-        font-size: 13px;
-        color: #2A1414;
-        word-break: break-all;
-        padding: 12px;
-        background: #EDE3D3;
-        border-radius: 4px;
-        margin-bottom: 14px;
-        line-height: 1.5;
+        font-family: monospace; font-size: 14px; color: #2A1414; word-break: break-all;
+        padding: 12px; background: #EDE3D3; border-radius: 4px; margin-bottom: 14px; line-height: 1.5;
     }
-    .result-actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
+    .result-actions { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn-copy, .btn-send {
-        flex: 1;
-        min-width: 140px;
-        padding: 13px;
-        border-radius: 4px;
-        font-size: 13px;
-        font-weight: bold;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        border: none;
-        text-align: center;
-        text-decoration: none;
-        display: block;
-        transition: background 0.2s, color 0.2s;
+        flex: 1; min-width: 140px; padding: 13px; border-radius: 4px; font-size: 13px; font-weight: bold;
+        letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; border: none; text-align: center;
+        text-decoration: none; display: block; transition: background 0.2s, color 0.2s;
     }
     .btn-copy { background: #FFFFFF; border: 1.5px solid #C9B896; color: #5C4A2E; }
     .btn-send { background: #25D366; color: white; }
@@ -456,7 +187,7 @@
 
             <label class="field-label">Créneaux horaires proposés</label>
             <div class="time-chip-grid" id="timeChipGrid"></div>
-            
+
             <div class="add-option-row">
                 <input type="time" id="newTimeInput">
                 <button class="btn-add" onclick="addCustomTime()">+ Ajouter une heure</button>
@@ -475,6 +206,7 @@
             <div class="subtitle">Vérifie tout, ajoute ton mot, puis génère le lien.</div>
 
             <div id="errorStep2" class="error-msg"></div>
+            <div id="infoStep2" class="info-msg"></div>
 
             <div class="recap-box" id="recapBox"></div>
 
@@ -535,7 +267,6 @@ function renderOptions() {
         chip.className = 'option-chip';
         if (mainOption === opt) chip.classList.add('selected-main');
         else if (altOptions.has(opt)) chip.classList.add('selected-alt');
-
         chip.innerHTML = (mainOption === opt ? '<span class="chip-star">★</span>' : '') + opt;
         chip.onclick = () => cycleOption(opt);
         grid.appendChild(chip);
@@ -550,11 +281,8 @@ function cycleOption(opt) {
         altOptions.delete(opt);
         delete descriptions[opt];
     } else {
-        if (!mainOption) {
-            mainOption = opt;
-        } else {
-            altOptions.add(opt);
-        }
+        if (!mainOption) mainOption = opt;
+        else altOptions.add(opt);
     }
     renderOptions();
 }
@@ -562,7 +290,6 @@ function cycleOption(opt) {
 function renderDescriptions() {
     const list = document.getElementById('descriptionsList');
     list.innerHTML = '';
-
     const selected = [];
     if (mainOption) selected.push({ name: mainOption, isMain: true });
     altOptions.forEach(opt => selected.push({ name: opt, isMain: false }));
@@ -575,21 +302,16 @@ function renderDescriptions() {
     selected.forEach(({ name, isMain }) => {
         const item = document.createElement('div');
         item.className = 'description-item';
-
         const header = document.createElement('div');
         header.className = 'description-item-header';
         header.innerHTML = `
             <span class="description-item-name">${name}</span>
             <span class="${isMain ? 'description-badge-main' : 'description-badge-alt'}">${isMain ? '★ Principale' : 'Alternative'}</span>
         `;
-
         const textarea = document.createElement('textarea');
         textarea.placeholder = `Décris le lieu, l'heure approximative, l'ambiance...`;
         textarea.value = descriptions[name] || '';
-        textarea.addEventListener('input', (e) => {
-            descriptions[name] = e.target.value;
-        });
-
+        textarea.addEventListener('input', (e) => { descriptions[name] = e.target.value; });
         item.appendChild(header);
         item.appendChild(textarea);
         list.appendChild(item);
@@ -605,7 +327,6 @@ function addCustomOption() {
         renderOptions();
     }
 }
-
 document.getElementById('newOptionInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') addCustomOption();
 });
@@ -613,9 +334,7 @@ document.getElementById('newOptionInput').addEventListener('keypress', (e) => {
 function renderTimeChips() {
     const grid = document.getElementById('timeChipGrid');
     grid.innerHTML = '';
-    
-    defaultTimes.sort(); 
-    
+    defaultTimes.sort();
     defaultTimes.forEach(time => {
         const chip = document.createElement('div');
         chip.className = 'time-chip' + (selectedTimes.has(time) ? ' selected' : '');
@@ -634,9 +353,7 @@ function addCustomTime() {
     const value = input.value;
     if (value) {
         selectedTimes.add(value);
-        if (!defaultTimes.includes(value)) {
-            defaultTimes.push(value);
-        }
+        if (!defaultTimes.includes(value)) defaultTimes.push(value);
         renderTimeChips();
         input.value = '';
     }
@@ -645,14 +362,12 @@ function addCustomTime() {
 function goToStep2() {
     const recipient = document.getElementById('recipientInput').value.trim();
     const errorDiv = document.getElementById('errorStep1');
-    
     if (!recipient || !mainOption || selectedTimes.size === 0) {
         errorDiv.textContent = 'Oops ! Ajoute le prénom, au moins 1 option de sortie (★) et 1 créneau pour continuer.';
         errorDiv.style.display = 'block';
         window.scrollTo(0, 0);
         return;
     }
-    
     errorDiv.style.display = 'none';
     renderRecap();
     document.getElementById('step1').classList.remove('active');
@@ -670,7 +385,6 @@ function renderRecap() {
     const recipient = document.getElementById('recipientInput').value.trim();
     const timesList = Array.from(selectedTimes).sort().join(' · ');
     const altList = Array.from(altOptions);
-
     let html = `
         <div class="recap-line">Pour <strong>${recipient}</strong> · <strong>${mainOption}</strong></div>
         <div class="recap-line">Créneaux : ${timesList}</div>
@@ -681,11 +395,40 @@ function renderRecap() {
     document.getElementById('recapBox').innerHTML = html;
 }
 
-// Fonction asynchrone avec is.gd intégrée + Proxy CORS
+// ============================================================
+// RACCOURCISSEMENT DE LIEN - TinyURL en direct, avec diagnostic clair
+// ============================================================
+async function shortenUrl(longUrl) {
+    const infoDiv = document.getElementById('infoStep2');
+
+    try {
+        const apiUrl = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(longUrl)}`;
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) {
+            throw new Error(`TinyURL a répondu avec le statut ${response.status}`);
+        }
+
+        const shortUrl = await response.text();
+
+        if (shortUrl && shortUrl.startsWith('http')) {
+            return shortUrl.trim();
+        } else {
+            throw new Error('Réponse TinyURL invalide: ' + shortUrl);
+        }
+    } catch (error) {
+        console.error('Échec du raccourcissement TinyURL:', error);
+        infoDiv.textContent = "Le lien court n'a pas pu être généré (service indisponible). Le lien complet fonctionne quand même normalement, il est juste plus long.";
+        infoDiv.style.display = 'block';
+        return longUrl;
+    }
+}
+
 async function generateLink() {
     const confirmChecked = document.getElementById('confirmCheckbox').checked;
     const creatorEmail = document.getElementById('creatorEmailInput').value.trim();
     const errorDiv = document.getElementById('errorStep2');
+    const infoDiv = document.getElementById('infoStep2');
     const btnGenerate = document.getElementById('btnGenerateFinal');
 
     if (!creatorEmail || !confirmChecked) {
@@ -693,11 +436,11 @@ async function generateLink() {
         errorDiv.style.display = 'block';
         return;
     }
-    
+
     errorDiv.style.display = 'none';
-    
-    // Feedback visuel de chargement
-    btnGenerate.textContent = "Génération du lien court...";
+    infoDiv.style.display = 'none';
+
+    btnGenerate.textContent = "Génération du lien...";
     btnGenerate.disabled = true;
 
     const recipient = document.getElementById('recipientInput').value.trim();
@@ -716,42 +459,20 @@ async function generateLink() {
     if (selectedTimes.size > 0) {
         params.set('times', Array.from(selectedTimes).sort().join(','));
     }
-
     if (altOptions.size > 0) {
         params.set('alt', Array.from(altOptions).join(','));
         const altDescPairs = Array.from(altOptions)
             .filter(opt => descriptions[opt])
             .map(opt => `${opt}::${descriptions[opt]}`);
-        if (altDescPairs.length > 0) {
-            params.set('alt_desc', altDescPairs.join('||'));
-        }
+        if (altDescPairs.length > 0) params.set('alt_desc', altDescPairs.join('||'));
     }
 
-    // Lien d'origine
-    let finalUrl = BASE_URL + '?' + params.toString();
+    const longUrl = BASE_URL + '?' + params.toString();
+    const finalUrl = await shortenUrl(longUrl);
 
-    // Raccourcissement avec l'API is.gd + Proxy CORS (AllOrigins)
-    try {
-        const isgdUrl = `https://is.gd/create.php?format=json&url=${encodeURIComponent(finalUrl)}`;
-        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(isgdUrl)}`;
-        
-        const response = await fetch(proxyUrl);
-        if (response.ok) {
-            const data = await response.json();
-            const parsedContents = JSON.parse(data.contents);
-            if (parsedContents.shorturl) {
-                finalUrl = parsedContents.shorturl;
-            }
-        }
-    } catch (error) {
-        console.log("Le raccourcisseur a échoué, utilisation du lien long.", error);
-    }
-
-    // Restauration du bouton
     btnGenerate.textContent = "Générer le lien";
     btnGenerate.disabled = false;
 
-    // Affichage
     document.getElementById('resultUrl').textContent = finalUrl;
     document.getElementById('resultBox').style.display = 'block';
 
@@ -764,14 +485,12 @@ async function generateLink() {
 function copyLink() {
     if (window._lastGeneratedUrl) {
         navigator.clipboard.writeText(window._lastGeneratedUrl);
-        
         const copyBtn = document.querySelector('.btn-copy');
         const originalText = copyBtn.textContent;
         copyBtn.textContent = 'Lien copié ✓';
-        copyBtn.style.background = '#E8F5E9'; 
+        copyBtn.style.background = '#E8F5E9';
         copyBtn.style.borderColor = '#4CAF50';
         copyBtn.style.color = '#2E7D32';
-        
         setTimeout(() => {
             copyBtn.textContent = originalText;
             copyBtn.style.background = '#FFFFFF';
