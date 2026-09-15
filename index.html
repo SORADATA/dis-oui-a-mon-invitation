@@ -487,19 +487,18 @@ async function confirmPlan() {
 // ============================================================
 async function sendResponseToBackend(data) {
     const payload = {
-        _subject: `💌 ${data.recipient} a répondu "${data.choice === 'oui' ? 'oui' : 'non'}" à ton invitation !`,
-        _template: 'table',
-        'Destinataire': data.recipient,
-        'A répondu': data.choice === 'oui' ? 'Oui 🎉' : 'Non',
-        'Option choisie': data.selected_option,
-        'Créneau choisi': data.selected_time,
-        'Petit mot laissé': data.note || '(aucun mot)',
-        "Nb. de fois où il/elle a esquivé le bouton Non": data.dodge_attempts,
-        'Répondu le': new Date(data.timestamp).toLocaleString('fr-FR', {
+        _subject: `💌 ${data.recipient} a dit OUI à ton date !`,
+        _template: 'box',
+        '✨ Invité(e)': data.recipient,
+        '🥂 Réponse finale': data.choice === 'oui' ? 'OUI ! 🎉' : 'Non',
+        '📍 Activité validée': data.selected_option,
+        '⏰ Heure du rendez-vous': data.selected_time,
+        '💬 Son petit mot': data.note || "Trop pressé(e) de dire oui pour laisser un message !",
+        '😅 Bouton "Non" esquivé': `${data.dodge_attempts} fois`,
+        '📅 Confirmé le': new Date(data.timestamp).toLocaleString('fr-FR', {
             dateStyle: 'long',
             timeStyle: 'short'
-        }),
-        'Référence invitation': data.invite_id
+        })
     };
 
     try {
